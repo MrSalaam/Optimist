@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import MenuIcon from "@/assets/icons/menu.svg";
+import Logo from "@/assets/icons/logo.svg"; // Add this import
 import { useTheme } from "@/context/ThemeContext";
 
 const LiquidButton = ({ onClick, className, children }: { 
@@ -114,15 +115,19 @@ const Header = () => {
     >
       <nav className="container-portfolio">
         <div className="flex items-center justify-between py-6">
-          {/* Logo */}
+          
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-mono font-bold text-xl cursor-pointer text-foreground hover:text-accent transition-colors duration-200"
+            className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
             onClick={() => handleNavClick('hero')}
           >
-            OPTIMIST
+            <img 
+              src={Logo} 
+              alt="Optimist Logo" 
+              className="h-6 w-auto dark:invert transition-all duration-200"
+            />
           </motion.div>
 
           {/* Desktop Navigation */}
