@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brutalist-Minimalist Portfolio Design System */
+
+@layer base {
+  :root {
+    /* Primary Backgrounds */
+    --background: 0 0% 100%; /* Pure white */
+    --background-secondary: 0 0% 98%; /* Off-white for cards */
+    --foreground: 0 0% 6.7%; /* Near black #111111 */
+    --foreground-secondary: 0 0% 40%; /* Medium gray #666666 */
+
+    /* Card System */
+    --card: 0 0% 98%; /* Off-white cards */
+    --card-foreground: 0 0% 6.7%;
+
+    /* Interactive Elements */
+    --primary: 0 0% 0%; /* Pure black accent */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%; /* Light gray backgrounds */
+    --secondary-foreground: 0 0% 6.7%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 0 0% 0%; /* Pure black for emphasis */
+    --accent-foreground: 0 0% 100%;
+
+    /* Form Elements */
+    --border: 0 0% 90%; /* Light gray borders #E5E5E5 */
+    --input: 0 0% 96%;
+    --ring: 0 0% 0%;
+
+    /* Utility */
+    --radius: 0.5rem;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-micro: all 0.15s ease-out;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6.7%;
+
+    /* Add theme transition variables */
+    --theme-transition: background-color 0.2s ease-in-out, 
+                       border-color 0.2s ease-in-out, 
+                       color 0.2s ease-in-out;
+  }
+
+  .dark {
+    /* Primary Backgrounds */
+    --background: 0 0% 3.9%; /* Deep black #0A0A0A */
+    --background-secondary: 0 0% 6.7%; /* Elevated black #111111 */
+    --foreground: 0 0% 100%; /* Pure white */
+    --foreground-secondary: 0 0% 63.1%; /* Light gray #A1A1A1 */
+
+    /* Card System */
+    --card: 0 0% 6.7%; /* Elevated black cards */
+    --card-foreground: 0 0% 100%;
+
+    /* Interactive Elements */
+    --primary: 0 0% 100%; /* White accent in dark mode */
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 63.1%;
+
+    --accent: 0 0% 100%; /* White for emphasis */
+    --accent-foreground: 0 0% 0%;
+
+    /* Form Elements */
+    --border: 0 0% 15%; /* Dark gray borders #262626 */
+    --input: 0 0% 10%;
+    --ring: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-[hsl(var(--border))]; /* Changed from border-border */
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Typography Scale */
+  .text-display {
+    @apply text-5xl md:text-6xl lg:text-7xl font-bold leading-tight;
+  }
+
+  .text-h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight;
+  }
+
+  .text-h2 {
+    @apply text-2xl md:text-3xl font-semibold leading-snug;
+  }
+
+  .text-h3 {
+    @apply text-xl md:text-2xl font-medium leading-snug;
+  }
+
+  .text-body-large {
+    @apply text-lg leading-relaxed;
+  }
+
+  .text-body {
+    @apply text-base leading-relaxed;
+  }
+
+  .text-caption {
+    @apply text-sm leading-normal;
+  }
+}
+
+@layer components {
+  /* Micro-interactions */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 ease-out hover:scale-105;
+  }
+
+  .fade-in {
+    @apply opacity-0 translate-y-4 transition-all duration-700 ease-out;
+  }
+
+  .fade-in.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Grid System */
+  .container-portfolio {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Card Styles */
+  .card-portfolio {
+    @apply bg-card border border-border rounded-lg p-6 hover-lift;
+  }
+
+  .card-project {
+    @apply bg-card border border-border rounded-lg overflow-hidden cursor-pointer;
+  }
+
+  /* Button Variants */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:opacity-90 hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground border border-border px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-muted;
+  }
+
+  .btn-ghost {
+    @apply text-foreground px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-secondary;
+  }
+
+  /* Add dark mode specific utilities */
+  .dark\:hover-lift {
+    @apply dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)];
+  }
+
+  /* Theme toggle animation */
+  .theme-toggle-icon {
+    @apply transition-transform duration-300;
+  }
+
+  .theme-toggle-icon.rotate {
+    @apply rotate-[360deg];
+  }
+
+  /* Dark mode image adjustments */
+  .dark-image-filter {
+    @apply dark:brightness-90 dark:contrast-100 transition-all duration-300;
+  }
+}
