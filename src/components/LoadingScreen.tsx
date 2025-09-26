@@ -10,7 +10,7 @@ const LoadingScreen = () => {
       transition={{ duration: 0.5 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden px-4 sm:px-6 lg:px-8"
     >
-      {/* Animated Background Elements */}
+      
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(3)].map((_, i) => (
           <motion.div
@@ -33,35 +33,35 @@ const LoadingScreen = () => {
               delay: i * 0.8,
             }}
             style={{
-              width: `${(i + 1) * 60}px`, // Reduced from 100px
-              height: `${(i + 1) * 60}px`, // Reduced from 100px
+              width: `${(i + 1) * 60}px`, 
+              height: `${(i + 1) * 60}px`, 
             }}
           />
         ))}
       </div>
 
-      {/* Center Container */}
+      
       <motion.div
         className="relative z-10 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        {/* Rotating Border */}
+        
         <motion.div
           className="absolute -inset-3 sm:-inset-4 md:-inset-6 rounded-full border border-accent/20"
           animate={{ rotate: 360 }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         />
 
-        {/* Pulsing Circle */}
+        
         <motion.div
           className="absolute -inset-1.5 sm:-inset-2 md:-inset-3 rounded-full bg-accent/5"
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
 
-        {/* Logo Container */}
+        
         <motion.div
           className="relative bg-background/80 backdrop-blur-sm rounded-full p-3 sm:p-4 md:p-6"
           whileHover={{ scale: 1.05 }}
@@ -82,7 +82,7 @@ const LoadingScreen = () => {
           />
         </motion.div>
 
-        {/* Loading Progress */}
+        
         <motion.div className="mt-4 sm:mt-6 relative w-24 sm:w-32 md:w-40 mx-auto">
           <div className="h-0.5 bg-accent/20 rounded-full">
             <motion.div
@@ -97,7 +97,7 @@ const LoadingScreen = () => {
             />
           </div>
 
-          {/* Loading Text */}
+        
           <motion.div
             className="mt-2 sm:mt-3 flex justify-center items-center space-x-1.5"
             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -125,14 +125,14 @@ const LoadingScreen = () => {
         </motion.div>
       </motion.div>
 
-      {/* Floating Elements */}
+      
       {[...Array(4)].map((_, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-accent/40"
           animate={{
-            x: [0, Math.random() * 40 - 20], // Reduced from 60
-            y: [0, Math.random() * 40 - 20], // Reduced from 60
+            x: [0, Math.random() * 40 - 20], 
+            y: [0, Math.random() * 40 - 20], 
             opacity: [0, 1, 0],
           }}
           transition={{

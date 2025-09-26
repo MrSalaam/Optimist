@@ -103,7 +103,7 @@
 
   /* Typography Scale */
   .text-display {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold leading-tight;
+    @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight;
   }
 
   .text-h1 {
