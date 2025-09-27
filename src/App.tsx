@@ -28,7 +28,7 @@ function App() {
             <Header />
             <main className="w-full">
               {/* Add an id for the hero section since your Header tries to scroll to it */}
-              <section id="hero" className="min-h-screen">
+              <section id="hero" className="h-screen">
                 <Hero />
               </section>
               <section id="about" className="h-screen">
