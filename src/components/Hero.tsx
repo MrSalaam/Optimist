@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, PenTool, Brush } from "lucide-react";
 import { motion } from "framer-motion";
-import myImage from '@/assets/images/hero.png'; // Import your image
+import myImage from '@/assets/images/hero.webp'; // Import your image
 
 const Hero = () => {
   const handleScrollToNext = () => {
