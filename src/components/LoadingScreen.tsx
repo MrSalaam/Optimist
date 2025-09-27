@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Logo from "@/assets/icons/logo.svg";
 
 const LoadingScreen = () => {
@@ -8,140 +8,102 @@ const LoadingScreen = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden px-4 sm:px-6 lg:px-8"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden"
     >
       
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={`circle-${i}`}
-            className="absolute rounded-full bg-accent/5"
-            initial={{
-              scale: 0,
-              x: `${Math.random() * 100}%`,
-              y: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0, 1.5, 1],
-              x: `${Math.random() * 100}%`,
-              y: `${Math.random() * 100}%`,
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              repeatType: "reverse",
-              delay: i * 0.8,
-            }}
-            style={{
-              width: `${(i + 1) * 60}px`, 
-              height: `${(i + 1) * 60}px`, 
-            }}
-          />
-        ))}
-      </div>
 
-      
-      <motion.div
-        className="relative z-10 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]"
-        initial={{ scale: 0.8 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        
+      {/* Main content container */}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Logo with enhanced animation */}
         <motion.div
-          className="absolute -inset-3 sm:-inset-4 md:-inset-6 rounded-full border border-accent/20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        />
-
-        
-        <motion.div
-          className="absolute -inset-1.5 sm:-inset-2 md:-inset-3 rounded-full bg-accent/5"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-
-        
-        <motion.div
-          className="relative bg-background/80 backdrop-blur-sm rounded-full p-3 sm:p-4 md:p-6"
-          whileHover={{ scale: 1.05 }}
+          initial={{ opacity: 0, scale: 0.5, rotateY: 180 }}
+          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+          transition={{ 
+            duration: 1.2, 
+            ease: "easeOut",
+            type: "spring",
+            stiffness: 100
+          }}
+          className="flex flex-col items-center relative w-full max-w-md"
         >
-          <motion.img
+          
+          <img
             src={Logo}
             alt="Optimist Logo"
-            className="h-8 w-auto sm:h-10 md:h-12 dark:invert transition-all duration-200"
+            className="h-8 w-auto sm:h-12 md:h-16 dark:invert relative z-10"
+          />
+        </motion.div>
+
+        {/* Animated loading text with typewriter effect */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mt-8 text-center"
+        >
+          <motion.p
+            className="text-base sm:text-lg text-foreground-secondary font-medium tracking-wide"
             animate={{
-              y: [0, -2, 0],
-              rotate: [0, 1, 0, -1, 0],
+              opacity: [0.7, 1, 0.7],
             }}
             transition={{
-              duration: 3,
+              duration: 2,
               repeat: Infinity,
               ease: "easeInOut",
             }}
+          >
+            Loading...
+          </motion.p>
+        </motion.div>
+
+        {/* Modern loading bar */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="mt-6 w-1/2 sm:w-2/3 h-1 bg-foreground/10 rounded-full overflow-hidden"
+        >
+          <motion.div
+            className="h-full bg-gradient-to-r from-white via-gray-700 to-black rounded-full"
+            animate={{
+              x: ['-100%', '100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{ width: '50%' }}
           />
         </motion.div>
 
-        
-        <motion.div className="mt-4 sm:mt-6 relative w-24 sm:w-32 md:w-40 mx-auto">
-          <div className="h-0.5 bg-accent/20 rounded-full">
+        {/* Animated dots */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="flex space-x-2 mt-6"
+        >
+          {[...Array(3)].map((_, i) => (
             <motion.div
-              className="h-full bg-accent rounded-full"
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
+              key={i}
+              className="w-2 h-2 bg-foreground-secondary rounded-full"
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.3, 1, 0.3],
+              }}
               transition={{
-                duration: 2,
+                duration: 1.5,
                 repeat: Infinity,
+                delay: i * 0.2,
                 ease: "easeInOut",
               }}
             />
-          </div>
-
-        
-          <motion.div
-            className="mt-2 sm:mt-3 flex justify-center items-center space-x-1.5"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <span className="text-[10px] sm:text-xs md:text-sm font-mono text-foreground-secondary">
-              Initializing
-            </span>
-            {[...Array(3)].map((_, i) => (
-              <motion.span
-                key={i}
-                className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-accent"
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                }}
-              />
-            ))}
-          </motion.div>
+          ))}
         </motion.div>
-      </motion.div>
+      </div>
 
-      
-      {[...Array(4)].map((_, i) => (
-        <motion.div
-          key={`particle-${i}`}
-          className="absolute w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-accent/40"
-          animate={{
-            x: [0, Math.random() * 40 - 20], 
-            y: [0, Math.random() * 40 - 20], 
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: i * 0.4,
-          }}
-        />
-      ))}
+       
     </motion.div>
   );
 };

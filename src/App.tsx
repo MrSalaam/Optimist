@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion'
 import Header from './components/Header'
 import LoadingScreen from './components/LoadingScreen'
 import Hero from './components/Hero'
+import About from './components/About'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,12 +26,14 @@ function App() {
         ) : (
           <div className="min-h-screen bg-background text-foreground antialiased">
             <Header />
-            <main>
+            <main className="w-full">
               {/* Add an id for the hero section since your Header tries to scroll to it */}
               <section id="hero" className="min-h-screen">
                 <Hero />
               </section>
-              <section id="about" className="h-screen"></section>
+              <section id="about" className="h-screen">
+                <About/>
+              </section>
               <section id="portfolio" className="h-screen"></section>
               <section id="services" className="h-screen"></section>
               <section id="contact" className="h-screen"></section>
@@ -38,6 +41,7 @@ function App() {
           </div>
         )}
       </AnimatePresence>
+
     </ThemeProvider>
   )
 }
