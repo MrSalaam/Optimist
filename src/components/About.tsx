@@ -1,52 +1,59 @@
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles, 
-  Award, 
-  Users, 
-  Clock, 
+  Sparkles,
+  Download,
+  User,
+  Award,
+  Briefcase,
+  Heart,
   Lightbulb,
-  Target,
-  TrendingUp,
-  Download
+  Zap,
+  Rocket
 } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+
+const sectionHeaders = {
+  about: {
+    icon: User,
+    text: "About Me",
+    color: "purple",
+  },
+};
+
+const skills = [
+  { name: "Brand Identity Design", level: 95 },
+  { name: "Illustrations", level: 98 },
+  { name: "Digital Design", level: 99 },
+  { name: "Pritings", level: 98 },
+  { name: "Motion Graphics", level: 95 },
+];
+
+const achievements = [
+  {
+    icon: Award,
+    number: "5+",
+    label: "Years of Experience",
+    description: "in design and branding",
+  },
+  {
+    icon: Briefcase,
+    number: "100+",
+    label: "Projects Completed",
+    description: "across various industries",
+  },
+];
+
+const coreValues = [
+  { icon: Lightbulb, title: "Creativity", description: "Innovative and imaginative solutions." },
+  { icon: Heart, title: "Passion", description: "Dedication in every project." },
+  { icon: Zap, title: "Efficiency", description: "Fast, effective and on-time delivery." },
+  { icon: Rocket, title: "Impact", description: "Designs that drive results." },
+];
  
 const About = () => {
-  const skills = [
-    { name: "Brand Identity", level: 95 },
-    { name: "Motion Graphics", level: 98 },
-    { name: "Printings", level: 99 },
-    { name: "Digital Design", level: 95 },
-    { name: "Illustration", level: 96 }
-  ];
-
-  const achievements = [
-    {
-      icon: Award,
-      number: "30+",
-      label: "Projects Completed",
-      description: "Successfully delivered across various industries"
-    },
-    {
-      icon: Users,
-      number: "50+",
-      label: "Happy Clients",
-      description: "Building lasting partnerships worldwide"
-    },
-    {
-      icon: Clock,
-      number: "3+",
-      label: "Years Experience",
-      description: "Dedicated to perfecting my craft"
-    },
-    {
-      icon: TrendingUp,
-      number: "100%",
-      label: "Success Rate",
-      description: "Committed to exceeding expectations"
-    }
-  ];
+  const aboutHeader = sectionHeaders.about;
+  const AboutIcon = aboutHeader.icon;
 
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -58,7 +65,7 @@ const About = () => {
   const y2 = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section id="about" ref={containerRef} className="py-20 lg:py-32 bg-background relative overflow-hidden">
+    <section id="about" ref={containerRef} className="py-12 sm:py-16 md:py-20 lg:py-32 bg-background relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-30" />
@@ -68,7 +75,7 @@ const About = () => {
         <motion.div style={{ y: y2 }} className="absolute bottom-1/3 right-16 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
       </div>
 
-      <div className="container-portfolio relative z-10">
+      <div className="container-portfolio relative z-10 px-4 sm:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -80,26 +87,19 @@ const About = () => {
               },
             },
           }}
-          className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center"
         >
-          {/* Left Content */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
-            }}
-          >
-            {/* Badge */}
+          {/* Header */}
+          <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 md:mb-16">
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
               }}
-              className="inline-flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border rounded-full px-4 py-2 mb-6 shadow-sm"
+              className="inline-flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 shadow-sm"
             >
               <div className="relative">
                 <motion.div
-                  className="absolute -inset-1 bg-amber-400/30 rounded-full blur-sm"
+                  className={`absolute -inset-1 bg-${aboutHeader.color}-400/30 rounded-full blur-sm`}
                   animate={{
                     scale: [1, 1.3, 1],
                     opacity: [0.5, 0.8, 0.5],
@@ -110,36 +110,40 @@ const About = () => {
                     ease: "easeInOut",
                   }}
                 />
-                <Lightbulb className="w-4 h-4 text-amber-400 relative" />
+                <AboutIcon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-${aboutHeader.color}-400 relative`} />
               </div>
-              <span className="text-sm font-medium text-foreground-secondary">About Me</span>
+              <span className="text-xs sm:text-sm font-medium text-foreground-secondary">{aboutHeader.text}</span>
             </motion.div>
 
-            {/* Title */}
             <motion.h2
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } },
               }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-foreground"
-            > 
-              {"Crafting Visual Stories That Drive Results".split(" ").map((word, i) => (
-                <span key={i} className="inline-block mr-3">
-                  {word.split("").map((char, j) => (
-                    <motion.span
-                      key={j}
-                      className="inline-block"
-                      variants={{
-                        hidden: { opacity: 0, y: 20 },
-                        visible: { opacity: 1, y: 0, transition: { delay: 0.2 + (i * 0.1) + (j * 0.02) } },
-                      }}
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
-                </span>
-              ))}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-foreground px-4"
+            >
+              Crafting Visual Stories That Drive Results
             </motion.h2>
+
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4 } },
+              }}
+              className="text-base sm:text-lg md:text-xl text-foreground-secondary leading-relaxed max-w-2xl mx-auto px-4"
+            >
+              A designer dedicated to helping brands tell their unique stories through compelling visual design
+            </motion.p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center">
+          {/* Left Content */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+            }}
+          >
 
             {/* Description */}
             <motion.div
@@ -150,7 +154,7 @@ const About = () => {
               className="space-y-4 mb-8"
             >
               <p className="text-lg text-foreground-secondary leading-relaxed">
-                I'm a passionate graphic designer dedicated to helping brands tell their unique stories 
+                A designer dedicated to helping brands tell their unique stories 
                 through compelling visual design. With over 3 years of experience, I specialize in creating 
                 brand identities that not only look stunning but also drive measurable business results.
               </p>
@@ -169,11 +173,11 @@ const About = () => {
               }}
               className="flex flex-col sm:flex-row gap-4 pt-4 "
             >
-              <Button size="lg" variant="ghost" asChild>
+              <Button size="lg" asChild className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5">
                 <a
                   href="/S_A_Ayilara_Resume.pdf"
                   download
-                  className="transition-all duration-300 flex items-center"
+                  className="flex items-center"
                 >
                   <motion.div
                     className="mr-2"
@@ -199,21 +203,16 @@ const About = () => {
               }}
               className="grid sm:grid-cols-2 gap-4 mt-12"
             > 
-              <motion.div whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }} className="flex items-center gap-3 p-4 bg-background/50 rounded-xl border border-border transition-all duration-300">
-                <Target className="w-5 h-5 text-accent flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-foreground text-sm">Strategic Focus</h4>
-                  <p className="text-xs text-foreground-secondary">Purpose-driven design decisions</p>
-                </div>
-              </motion.div>
-              <motion.div whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }} className="flex items-center gap-3 p-4 bg-background/50 rounded-xl border border-border transition-all duration-300">
-                <Sparkles className="w-5 h-5 text-accent flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-foreground text-sm">Creative Excellence</h4>
-                  <p className="text-xs text-foreground-secondary">Innovative and memorable solutions</p>
-                </div>
-              </motion.div>
-              
+              {coreValues.map((value) => {
+                const Icon = value.icon;
+                return (<motion.div key={value.title} whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }} className="flex items-center gap-3 p-4 bg-background/50 rounded-xl border border-border transition-all duration-300">
+                  <Icon className="w-5 h-5 text-accent flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-foreground text-sm">{value.title}</h4>
+                    <p className="text-xs text-foreground-secondary">{value.description}</p>
+                  </div>
+                </motion.div>)
+              })}
             </motion.div>
           </motion.div>
 
@@ -296,6 +295,7 @@ const About = () => {
               </div>
             </motion.div>
           </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>

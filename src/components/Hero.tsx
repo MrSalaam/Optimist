@@ -27,9 +27,9 @@ const Hero = () => {
     <div className="h-full relative w-full bg-background">
       <div className="h-full relative overflow-hidden">
         {/* Enhanced Background Elements */}
-        <div className="absolute inset-0">
+        <div className=" h-full absolute inset-0">
           {/* Grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-50" />
+          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-30" />
         </div>
         
         <motion.div
@@ -42,7 +42,7 @@ const Hero = () => {
               },
             },
           }}
-          className="container-portfolio h-full flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-12 lg:gap-0 relative z-10 pt-28 pb-12"
+          className="container-portfolio h-full flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-12 lg:gap-0 relative z-10 pt-32 pb-20"
         >
           {/* Left Content */}
           <motion.div

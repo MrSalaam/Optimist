@@ -194,4 +194,13 @@
   .dark-image-filter {
     @apply dark:brightness-90 dark:contrast-100 transition-all duration-300;
   }
+
+  /* Hide scrollbar utility */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
