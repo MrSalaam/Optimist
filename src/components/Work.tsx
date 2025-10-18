@@ -1,15 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { 
   ArrowUpRight,
-  Sparkles,
-  Layers,
   Workflow, 
   LoaderCircle,
-  Zap
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-// Video is now in public folder, so we reference it directly
+import { ErrorBoundary } from 'react-error-boundary';
+
 const bashkim = "/videos/bashkim.mp4";
 const c = "/videos/c.mp4";
 const recuva = "/videos/recuva.mp4";
@@ -55,15 +52,32 @@ const ImageWithLoader = ({ src, className }: { src: string, className: string })
   );
 };
 
+interface Project {
+  id: number;
+  category: string;
+  year: string;
+  media: string;
+  mediaType: "video" | "image";
+  featured: boolean;
+  poster?: string;
+  link: string;
+  description?: string;
+}
+
+interface VideoState {
+  loaded: boolean;
+  playing: boolean;
+}
+
 const Work = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [hoveredProject, setHoveredProject] = useState(null);
-  const [videoStates, setVideoStates] = useState<Record<number, { loaded: boolean; playing: boolean }>>({});
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [videoStates, setVideoStates] = useState<Record<number, VideoState>>({});
   const [isGridLoading, setIsGridLoading] = useState(true);
 
   const filters = ["All", "Brand Identity Design", "Illustrations", "Digital Design", "Printing", "Motion Graphics"];
 
-  const projects = [
+  const projects: Project[] = [
     {
       id: 1,
       category: "Brand Identity Design",
@@ -172,37 +186,40 @@ const Work = () => {
 
   const filteredProjects = activeFilter === "All" 
     ? projects 
-    : projects.filter(p => p.category === activeFilter);
+    : projects.filter((p: Project) => p.category === activeFilter);
 
   const containerRef = useRef(null);
 
-  const handleVideoClick = (e: React.MouseEvent, projectId: number) => {
+  const handleVideoClick = (e: React.MouseEvent<HTMLDivElement>, projectId: number) => {
     e.stopPropagation();
-    const videoElement = e.currentTarget.querySelector('video') as HTMLVideoElement;
+    const videoElement = e.currentTarget.querySelector('video');
     
     if (!videoElement) return;
 
-    if (videoElement.paused) {
-      videoElement.muted = true;
-      videoElement.play()
-        .then(() => {
-          setVideoStates(prev => ({
-            ...prev,
-            [projectId]: { loaded: true, playing: true }
-          }));
-        })
-        .catch(err => {
-          console.error('Video play failed:', err);
-          // Try unmuting and playing again
-          videoElement.muted = false;
-          videoElement.play().catch(e => console.error('Second play attempt failed:', e));
-        });
-    } else {
-      videoElement.pause();
-      setVideoStates(prev => ({
-        ...prev,
-        [projectId]: { ...prev[projectId], playing: false }
-      }));
+    try {
+      if (videoElement.paused) {
+        videoElement.muted = true;
+        videoElement.play()
+          .then(() => {
+            setVideoStates(prev => ({
+              ...prev,
+              [projectId]: { loaded: true, playing: true }
+            }));
+          })
+          .catch((err: Error) => {
+            console.error('Video play failed:', err);
+            videoElement.muted = false;
+            videoElement.play().catch(e => console.error('Second play attempt failed:', e));
+          });
+      } else {
+        videoElement.pause();
+        setVideoStates(prev => ({
+          ...prev,
+          [projectId]: { ...prev[projectId], playing: false }
+        }));
+      }
+    } catch (error) {
+      console.error('Video playback error:', error);
     }
   };
 
@@ -407,7 +424,13 @@ const Work = () => {
                             playsInline 
                             preload="none"
                             poster={project.poster}
-                          
+                            aria-label={`Video for ${project.category}`}
+                            role="presentation"
+                            onError={(e) => {
+                              console.error('Video failed to load:', project.media);
+                              const target = e.target as HTMLVideoElement;
+                              target.style.display = 'none';
+                            }}
                           /> 
                           {/* Play button overlay */}
                           <div 
@@ -483,58 +506,17 @@ const Work = () => {
               ))}
             </div>
           )}
-
-          {/* CTA Section */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.8 } },
-            }}
-            className="relative px-4"
-          >
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden">
-              <div className="relative p-6 sm:p-8 md:p-12 lg:p-16 text-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="inline-block mb-4 sm:mb-6"
-                >
-                  <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-accent" />
-                </motion.div>
-                
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4 px-2">
-                  Let's Create Something Extraordinary
-                </h3>
-                <p className="text-sm sm:text-base md:text-lg text-foreground-secondary mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
-                  Ready to elevate your brand with design that drives results? Let's start a conversation.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
-                  <Button 
-                    size="lg"
-                    className="group shadow-lg hover:shadow-2xl transition-all duration-300 w-full sm:w-auto"
-                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                  >
-                    <Zap className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" />
-                    Start Your Project
-                  </Button>
-                  <Button 
-                    size="lg"
-                    variant="outline"
-                    className="bg-background/50 backdrop-blur-sm border-border hover:bg-background transition-all duration-300 w-full sm:w-auto"
-                    onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-                  >
-                    <Layers className="w-4 h-4 mr-2" />
-                    View Process
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
   );
 };
 
-export default Work;
+// Wrap the Work component export with:
+export default function WorkWithErrorBoundary() {
+  return (
+    <ErrorBoundary fallback={<div>Something went wrong loading the portfolio.</div>}>
+      <Work />
+    </ErrorBoundary>
+  );
+}

@@ -6,14 +6,13 @@ import LoadingScreen from './components/LoadingScreen'
 import Hero from './components/Hero'
 import About from './components/About'
 import Work from './components/Work'
+import Partnership from './components/Partnership'
 import heroImage from '@/assets/images/hero.webp'; // Import the critical hero image
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // We'll wait for critical assets to load before hiding the loading screen.
-    // For now, the most critical asset is the main hero image.
     const imagesToPreload = [heroImage];
     
     let loadedCount = 0;
@@ -27,7 +26,7 @@ function App() {
     const handleImageLoad = () => {
       loadedCount++;
       if (loadedCount === totalImages) {
-        // Add a small delay to prevent a jarring flash if loading is too fast
+
         setTimeout(() => setIsLoading(false), 500);
       }
     };
@@ -36,7 +35,7 @@ function App() {
       const img = new Image();
       img.src = src;
       img.onload = handleImageLoad;
-      img.onerror = handleImageLoad; // Also count errors to avoid getting stuck
+      img.onerror = handleImageLoad; 
     });
   }, [])
 
@@ -62,7 +61,9 @@ function App() {
               <section id="work">
                 <Work/>
               </section>
-             
+              <section id="partnership">
+                <Partnership/>
+              </section>
               <section id="services" className="py-20 lg:py-32">
 
               </section>
