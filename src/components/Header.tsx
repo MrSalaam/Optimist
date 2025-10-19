@@ -218,9 +218,10 @@ const Header = () => {
                     </motion.button>
                   ))}
                   <motion.div
+                    className="relative z-10"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
+                    transition={{ duration: 0.3, delay: navItems.length * 0.1 }} 
                   >
                     <LiquidButton
                       onClick={() => handleNavClick('contact')}

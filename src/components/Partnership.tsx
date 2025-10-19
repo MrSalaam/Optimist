@@ -1,153 +1,91 @@
-import { motion } from "framer-motion";
-import { useRef } from "react";
-import { 
-  Handshake, 
-  Users, 
-  TrendingUp, 
-  Globe,
-  Star
-} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { Handshake, ChevronLeft, ChevronRight } from "lucide-react";
 
 const Partnership = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const testimonials = [
+    {
+      quote: "Working with S.A Ayilara transformed our brand completely. The strategic approach and attention to detail resulted in a 200% increase in customer engagement and significantly boosted our market presence.",
+      author: "John Smith",
+      title: "CEO, TechFlow Solutions",
+      initials: "JS"
+    },
+    {
+      quote: "The new brand identity is not only beautiful but also incredibly effective. We've seen a massive uptick in brand recognition and customer loyalty since the launch. Truly a game-changer for us.",
+      author: "Jane Doe",
+      title: "Founder, EcoLife",
+      initials: "JD"
+    },
+    {
+      quote: "In a crowded market, our new design stands out and tells our story perfectly. The process was collaborative, insightful, and delivered results beyond our expectations. Highly recommended!",
+      author: "Sam Wilson",
+      title: "Marketing Director, UrbanCafe",
+      initials: "SW"
+    }
+  ];
+
+  const activeTestimonial = testimonials[currentTestimonial];
+
   const containerRef = useRef(null);
 
-  // Sample client/partner logos - using realistic brand-style SVGs
+
   const partners = [
     {
-      name: "TechFlow",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <rect x="10" y="8" width="8" height="24" rx="2"/>
-          <rect x="22" y="12" width="8" height="20" rx="2"/>
-          <rect x="34" y="6" width="8" height="28" rx="2"/>
-          <rect x="46" y="10" width="8" height="24" rx="2"/>
-          <text x="62" y="26" className="text-sm font-bold">TechFlow</text>
-        </svg>
-      )
+      name: "Bashkim",
+      logo: "/logos/bashkim logo.png",
     },
     {
-      name: "EcoLife",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <circle cx="20" cy="20" r="12" fill="none" stroke="currentColor" strokeWidth="3"/>
-          <path d="M14 20c0-6 4-8 6-8s6 2 6 8c0 4-2 8-6 8s-6-4-6-8z" fill="currentColor"/>
-          <text x="38" y="26" className="text-sm font-bold">EcoLife</text>
-        </svg>
-      )
+      name: "Crosshire",
+      logo: "/logos/crosshire.png",
     },
     {
-      name: "UrbanCafe",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <rect x="8" y="12" width="24" height="16" rx="8" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <rect x="12" y="8" width="4" height="8" rx="2"/>
-          <rect x="20" y="6" width="4" height="10" rx="2"/>
-          <rect x="28" y="8" width="4" height="8" rx="2"/>
-          <text x="38" y="26" className="text-sm font-bold">UrbanCafe</text>
-        </svg>
-      )
+      name: "Hinansho",
+      logo: "/logos/Hinansho.svg",
     },
     {
-      name: "Wellness Co",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <circle cx="20" cy="20" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <path d="M20 12v16M12 20h16" stroke="currentColor" strokeWidth="3"/>
-          <text x="38" y="26" className="text-sm font-bold">Wellness Co</text>
-        </svg>
-      )
+      name: "Makkan",
+      logo: "/logos/Makkan.png",
     },
     {
-      name: "FinanceApp",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <rect x="8" y="8" width="24" height="24" rx="4" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <path d="M16 16h8M16 20h12M16 24h6" stroke="currentColor" strokeWidth="2"/>
-          <text x="38" y="26" className="text-sm font-bold">FinanceApp</text>
-        </svg>
-      )
+      name: "Reward clan",
+      logo: "/logos/rewardclan.svg",
     },
     {
-      name: "FashionWeek",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <polygon points="20,8 28,24 12,24" fill="currentColor"/>
-          <circle cx="20" cy="28" r="4" fill="currentColor"/>
-          <text x="38" y="26" className="text-sm font-bold">FashionWeek</text>
-        </svg>
-      )
+      name: "Grovane",
+      logo: "/logos/Grovane.png",
     },
     {
-      name: "StartupHub",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <rect x="8" y="16" width="6" height="12" rx="1"/>
-          <rect x="16" y="12" width="6" height="16" rx="1"/>
-          <rect x="24" y="8" width="6" height="20" rx="1"/>
-          <text x="38" y="26" className="text-sm font-bold">StartupHub</text>
-        </svg>
-      )
-    },
-    {
-      name: "GreenTech",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <path d="M20 8l8 12h-6l-2 8-8-12h6l2-8z" fill="currentColor"/>
-          <text x="38" y="26" className="text-sm font-bold">GreenTech</text>
-        </svg>
-      )
-    },
-    {
-      name: "MediaCorp",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <rect x="8" y="12" width="24" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <polygon points="16,18 22,21 16,24" fill="currentColor"/>
-          <text x="38" y="26" className="text-sm font-bold">MediaCorp</text>
-        </svg>
-      )
-    },
-    {
-      name: "CloudSync",
-      logo: (
-        <svg viewBox="0 0 120 40" className="h-8 w-auto fill-current">
-          <path d="M28 18c0-4-3-6-6-6-2 0-4 1-5 3-1-1-2-1-3-1-3 0-5 2-5 5 0 3 2 5 5 5h12c2 0 4-2 4-4 0-2-1-3-2-2z" fill="currentColor"/>
-          <text x="38" y="26" className="text-sm font-bold">CloudSync</text>
-        </svg>
-      )
+      name: "advantarxyz",
+      logo: "/logos/advantarxyz.jpg",
     }
+    
   ];
 
-  // Duplicate the array to create seamless loop
+  // Duplicate partners array 
   const duplicatedPartners = [...partners, ...partners];
 
-  const stats = [
-    {
-      icon: Users,
-      number: "50+",
-      label: "Happy Clients",
-      description: "Across various industries"
-    },
-    {
-      icon: Globe,
-      number: "15+",
-      label: "Countries",
-      description: "Worldwide partnerships"
-    },
-    {
-      icon: TrendingUp,
-      number: "200%",
-      label: "Growth Rate",
-      description: "Client business improvement"
-    },
-    {
-      icon: Star,
-      number: "4.9/5",
-      label: "Rating",
-      description: "Client satisfaction score"
-    }
-  ];
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 7000); // Change testimonial every 7 seconds
+  
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentTestimonial, testimonials.length]);
 
+  const handlePrevTestimonial = () => {
+    setCurrentTestimonial(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+    );
+  };
+
+  const handleNextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+  
   return (
     <section id="partnerships" ref={containerRef} className="py-12 sm:py-16 md:py-20 lg:py-32 bg-background relative overflow-hidden">
       {/* Background Elements */}
@@ -204,7 +142,7 @@ const Partnership = () => {
               }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-foreground px-4"
             >
-              Trusted by Industry Leaders
+              Trusted by Brand Leaders
             </motion.h2>
 
             <motion.p
@@ -228,9 +166,7 @@ const Partnership = () => {
           >
             <div className="relative overflow-hidden py-8">
               {/* Gradient Overlays */}
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-              
+            
               {/* Scrolling Container */}
               <div className="relative">
                 <motion.div
@@ -247,11 +183,19 @@ const Partnership = () => {
                   {duplicatedPartners.map((partner, index) => (
                     <motion.div
                       key={`${partner.name}-${index}`}
-                      className="flex-shrink-0 text-foreground-secondary hover:text-accent transition-colors duration-300 opacity-60 hover:opacity-100"
+                      className="group flex-shrink-0 text-foreground-secondary transition-opacity duration-300 opacity-60 hover:opacity-100"
                       whileHover={{ scale: 1.1 }}
-                      style={{ minWidth: "120px" }}
+                      style={{ minWidth: "140px" }}
                     >
-                      {partner.logo}
+                      <img 
+                        src={partner.logo} 
+                        alt={`${partner.name} logo`} 
+                        className={`w-auto transition-all duration-300 ${
+                          partner.name === 'Hinansho' 
+                            ? 'h-28 grayscale group-hover:grayscale-0' // Specific styles for Hinansho logo
+                            : 'h-8 grayscale group-hover:grayscale-0' // Default styles for other logos
+                        }`}
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -267,37 +211,96 @@ const Partnership = () => {
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 1.4 } },
             }}
-            className="max-w-4xl mx-auto text-center"
+            className="relative max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8"
           >
-            <motion.blockquote
-              variants={{
-                hidden: { opacity: 0, scale: 0.95 },
-                visible: { opacity: 1, scale: 1, transition: { duration: 0.6, delay: 1.6 } },
-              }}
-              className="text-xl lg:text-2xl text-foreground-secondary italic leading-relaxed mb-6 relative"
-            >
-              <span className="text-6xl text-accent/20 absolute -top-4 -left-2">"</span>
-              Working with S.A Ayilara transformed our brand completely. The strategic approach and 
-              attention to detail resulted in a 200% increase in customer engagement and significantly 
-              boosted our market presence.
-              <span className="text-6xl text-accent/20 absolute -bottom-8 -right-2">"</span>
-            </motion.blockquote>
-            
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 1.8 } },
-              }}
-              className="flex items-center justify-center gap-4"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-accent/20 to-primary/20 rounded-full flex items-center justify-center">
-                <span className="text-lg font-bold text-accent">JS</span>
+            {/* Testimonial Card */}
+            <div className="relative bg-background/50 backdrop-blur-md border border-border rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16">
+              
+
+              {/* Navigation Buttons */}
+              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none px-2 sm:px-4 md:px-6 lg:px-8">
+                <button
+                  onClick={handlePrevTestimonial}
+                  className="pointer-events-auto transform -translate-x-1/3 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background/80 hover:bg-accent text-foreground-secondary hover:text-white dark:hover:text-black shadow-lg backdrop-blur-sm border border-border transition-all duration-300 flex items-center justify-center group"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-0.5" />
+                </button>
+                <button
+                  onClick={handleNextTestimonial}
+                  className="pointer-events-auto transform translate-x-1/3 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background/80 hover:bg-accent text-foreground-secondary hover:text- dark:hover:text-black shadow-lg backdrop-blur-sm border border-border transition-all duration-300 flex items-center justify-center group"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5" />
+                </button>
               </div>
-              <div className="text-left">
-                <p className="font-semibold text-foreground">John Smith</p>
-                <p className="text-sm text-foreground-secondary">CEO, TechFlow Solutions</p>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="relative z-10"
+                >
+                  {/* Quote Icon */}
+                  <div className="absolute -top-3 sm:-top-4 -left-2 text-accent/10">
+                    <svg 
+                      width="32" 
+                      height="32" 
+                      viewBox="0 0 24 24" 
+                      fill="currentColor"
+                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                    >
+                      <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"/>
+                    </svg>
+                  </div>
+
+                  {/* Testimonial Content */}
+                  <blockquote className="mb-6 sm:mb-8 md:mb-10 relative">
+                    <motion.p 
+                      className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-foreground italic leading-relaxed font-light max-w-4xl mx-auto text-center px-4 sm:px-6 md:px-8"
+                      style={{ textWrap: "balance" }}
+                    >
+                      {activeTestimonial.quote}
+                    </motion.p>
+                  </blockquote>
+
+                  {/* Author Info */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                    <div className="relative">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-accent rounded-2xl flex items-center justify-center relative">
+                        <span className="text-base sm:text-lg font-bold text-white dark:text-black">{activeTestimonial.initials}</span>
+                      </div>
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <p className="font-semibold text-foreground text-base sm:text-lg">{activeTestimonial.author}</p>
+                      <p className="text-foreground-secondary text-sm sm:text-base">{activeTestimonial.title}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Progress Dots */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className="group"
+                  >
+                    <span
+                      className={`block h-1.5 rounded-full transition-all duration-300 ${
+                        index === currentTestimonial
+                          ? 'bg-accent w-6 sm:w-8'
+                          : 'bg-border w-1.5 sm:w-2 group-hover:bg-foreground-secondary/50'
+                      }`}
+                    />
+                  </button>
+                ))}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         </motion.div>
       </div>
