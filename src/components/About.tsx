@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
   Download,
   User,
   Award,
@@ -260,7 +259,6 @@ const About = () => {
               className="bg-background/80 backdrop-blur-sm border border-border rounded-2xl p-6"
             >
               <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-accent" />
                 Core Skills
               </h3>
               <div className="space-y-4">
