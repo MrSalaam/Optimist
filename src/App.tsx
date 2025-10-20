@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ThemeProvider } from './context/ThemeContext'
+import { ThemeProvider } from './components/context/ThemeContext'
 import { AnimatePresence } from 'framer-motion'
 import Header from './components/Header'
 import LoadingScreen from './components/LoadingScreen'

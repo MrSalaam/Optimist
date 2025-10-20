@@ -3,7 +3,7 @@ import { X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import MenuIcon from "@/assets/icons/menu.svg";
 import Logo from "@/assets/icons/logo.svg"; // Add this import
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/components/context/ThemeContext";
 
 const LiquidButton = ({ onClick, className, children }: { 
   onClick: () => void;
