@@ -7,22 +7,22 @@ const Partnership = () => {
 
   const testimonials = [
     {
-      quote: "Working with S.A Ayilara transformed our brand completely. The strategic approach and attention to detail resulted in a 200% increase in customer engagement and significantly boosted our market presence.",
-      author: "John Smith",
-      title: "CEO, TechFlow Solutions",
-      initials: "JS"
+      quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand’s essence. Professional, creative, and always on time—couldn’t ask for more! Highly recommend his services.",
+      author: "Olusegun Joel-Alabi",
+      title: "CEO, Makkan Innovation",
+      initials: "OJA"
     },
     {
-      quote: "The new brand identity is not only beautiful but also incredibly effective. We've seen a massive uptick in brand recognition and customer loyalty since the launch. Truly a game-changer for us.",
-      author: "Jane Doe",
-      title: "Founder, EcoLife",
-      initials: "JD"
+      quote: "Ayilara S. has been instrumental in enhancing the visual appeal of our brand",
+      author: "ATINUADE",
+      title: "ATINUADE Brand Team",
+      initials: "A"
     },
     {
-      quote: "In a crowded market, our new design stands out and tells our story perfectly. The process was collaborative, insightful, and delivered results beyond our expectations. Highly recommended!",
-      author: "Sam Wilson",
-      title: "Marketing Director, UrbanCafe",
-      initials: "SW"
+      quote: "His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We’re excited for more opportunities to collaborate with him.",
+      author: "Cornerstone Ephraim",
+      title: "Co-Founder, ATINUADE",
+      initials: "CE"
     }
   ];
 

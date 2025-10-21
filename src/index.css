@@ -166,6 +166,12 @@
   /* Button Variants */
   .btn-primary {
     @apply bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:opacity-90 hover:scale-105;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 10px 25px -5px rgba(var(--accent), 0.3);
   }
 
   .btn-secondary {
@@ -202,5 +208,100 @@
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Section spacing utility - uniform across all sections */
+  .section-padding {
+    @apply py-14 sm:py-16 md:py-24 lg:py-32;
+  }
+
+  /* Background pattern utility - uniform across all sections */
+  .section-pattern {
+    @apply absolute inset-0 pointer-events-none;
+  }
+
+  .section-pattern::before {
+    content: '';
+    @apply absolute inset-0;
+    background-image: linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+                      linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+  }
+
+  @media (min-width: 640px) {
+    .section-pattern::before {
+      background-size: 50px 50px;
+    }
+  }
+
+  /* 3D Navigation Buttons */
+  .btn-nav-3d {
+    @apply w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-accent/30 bg-background/80 backdrop-blur-xl flex items-center justify-center transition-all hover:border-accent hover:bg-accent/10 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .btn-nav-3d:hover:not(:disabled) {
+    transform: scale(1.1);
+  }
+
+  .btn-nav-3d:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  /* Card hover effects with GPU acceleration */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:border-accent/50;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply px-2.5 py-1 bg-background/90 backdrop-blur-md text-[11px] sm:text-xs font-medium text-foreground rounded-full border border-border whitespace-nowrap;
+    transform: translateZ(0);
+  }
+
+  .badge-secondary {
+    @apply px-2.5 py-1 bg-background/90 backdrop-blur-md text-[11px] sm:text-xs font-medium text-foreground-secondary rounded-full border border-border;
+    transform: translateZ(0);
+  }
+
+  /* Button styles with GPU acceleration */
+  .btn-icon {
+    @apply w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent hover:bg-accent/90 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95;
+    transform: translateZ(0);
+    will-change: transform;
+    color: white;
+  }
+
+  .dark .btn-icon {
+    color: black;
+  }
+
+  .btn-filter {
+    @apply px-4 sm:px-5 py-2 text-sm font-medium transition-colors duration-200 rounded-xl;
+    transform: translateZ(0);
+  }
+
+  .btn-pagination {
+    @apply w-10 h-10 rounded-full border flex items-center justify-center text-sm font-medium transition-all;
+    transform: translateZ(0);
+  }
+
+  /* Active pagination button colors */
+  .btn-pagination.bg-accent {
+    color: white;
+  }
+
+  .dark .btn-pagination.bg-accent {
+    color: black;
+  }
+
+  .btn-nav {
+    @apply w-10 h-10 rounded-full border border-border bg-background/80 backdrop-blur-sm flex items-center justify-center transition-all hover:border-accent hover:bg-accent/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:bg-background/80;
+    transform: translateZ(0);
   }
 }

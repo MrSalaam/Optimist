@@ -1,43 +1,27 @@
-import { useState, useEffect } from 'react'
-import { ThemeProvider } from './components/context/ThemeContext'
-import { AnimatePresence } from 'framer-motion'
-import Header from './components/Header'
-import LoadingScreen from './components/LoadingScreen'
-import Hero from './components/Hero'
-import About from './components/About'
-import Work from './components/Work'
-import Partnership from './components/Partnership'
-import heroImage from '@/assets/images/hero.webp'; // Import the critical hero image
+import { lazy, Suspense, useState, useEffect } from "react";
+import { ThemeProvider } from "@/components/context/ThemeContext";
+import Navbar from "@/components/Navbar";
+import { AnimatePresence } from "framer-motion";
+import LoadingScreen from "@/components/LoadingScreen";
+
+const Hero = lazy(() => import("@/components/Hero"));
+const Work = lazy(() => import("@/components/Work"));
+const About = lazy(() => import("@/components/About"));
+const Services = lazy(() => import("@/components/Services"));
+const Partnership = lazy(() => import("@/components/Partnership"));
+const Contact = lazy(() => import("@/components/Contact"));
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const imagesToPreload = [heroImage];
-    
-    let loadedCount = 0;
-    const totalImages = imagesToPreload.length;
-
-    if (totalImages === 0) {
+    // Simulate loading time
+    const timer = setTimeout(() => {
       setIsLoading(false);
-      return;
-    }
+    }, 3000); // 3 seconds
 
-    const handleImageLoad = () => {
-      loadedCount++;
-      if (loadedCount === totalImages) {
-
-        setTimeout(() => setIsLoading(false), 500);
-      }
-    };
-
-    imagesToPreload.forEach(src => {
-      const img = new Image();
-      img.src = src;
-      img.onload = handleImageLoad;
-      img.onerror = handleImageLoad; 
-    });
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <ThemeProvider>
@@ -45,36 +29,41 @@ function App() {
         {isLoading ? (
           <LoadingScreen key="loading" />
         ) : (
-          
-          <div className="relative min-h-screen bg-background text-foreground antialiased overflow-hidden">
-            {/* Global background pattern */}
-            <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-20" />
-            <Header />
-            <main className="w-full">
+          <div key="content" className="relative min-h-screen">
+            {/* Global Background Pattern */}
+            <div 
+              className="fixed inset-0 pointer-events-none z-0"
+              style={{ willChange: 'auto' }}
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:40px_40px] sm:bg-[size:50px_50px] opacity-30" />
+            </div>
 
-              <section id="hero">
-                <Hero />
-              </section>
-              <section id="about">
-                <About/>
-              </section>
-              <section id="work">
-                <Work/>
-              </section>
-              <section id="partnership">
-                <Partnership/>
-              </section>
-              <section id="services" className="py-20 lg:py-32">
-
-              </section>
-              <section id="contact" className="py-20 lg:py-32"></section>
-            </main>
+            {/* Content */}
+            <div className="relative z-10">
+              <Navbar />
+              <AnimatePresence mode="wait">
+                <main>
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center min-h-screen">
+                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+                    </div>
+                  }>
+                    <Hero />
+                    <About />
+                    <Services />
+                    <Work />
+                    <Partnership />
+                    <Contact />
+                  </Suspense>
+                </main>
+              </AnimatePresence>
+            </div>
           </div>
         )}
       </AnimatePresence>
-
     </ThemeProvider>
-  )
+  );
 }
 
-export default App
+export default App;

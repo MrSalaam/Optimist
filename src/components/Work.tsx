@@ -1,25 +1,11 @@
 import { 
   ArrowUpRight,
-  Workflow, 
-  LoaderCircle,
+  Workflow,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
-
-// Optimized video paths with WebM format
-const bashkim = "/videos/bashkim.webm";
-const c = "/videos/c.webm";
-const recuva = "/videos/recuva.webm";
-
-// Optimized image paths with WebP format
-const hinansho = "/images/hinansho.webp";
-const EUPHORIA = "/images/EUPHORIA.webp";
-const ALARABARA = "/images/ALARABARA.webp";
-const instagram = "/images/instagram.webp";
-const weightx = "/images/weightx.webp";
-const atinude = "/images/atinude.webp";
-const couture = "/images/couture.webp";
-const fresh = "/images/fresh.webp";
+import React, { useRef, useState, useMemo, useCallback, useEffect } from "react";
+import { PROJECTS, FILTERS, PROJECTS_PER_PAGE } from "../constants/projects";
 
 interface ImageWithLoaderProps {
   src: string;
@@ -27,216 +13,518 @@ interface ImageWithLoaderProps {
   alt?: string;
 }
 
-// Simplified image component
-const ImageWithLoader = ({ src, className, alt = "Project image" }: ImageWithLoaderProps) => {
+/**
+ * Optimized image component with Intersection Observer for lazy loading
+ */
+const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({ src, className, alt = "Project image" }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const imgRef = useRef<HTMLDivElement>(null);
+
+  // Use Intersection Observer for true lazy loading
+  useEffect(() => {
+    if (!imgRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoad(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(imgRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="absolute inset-0 bg-background/5">
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <LoaderCircle className="w-8 h-8 text-foreground/30 animate-spin" />
+    <div ref={imgRef} className="absolute inset-0">
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 animate-pulse bg-background/10" />
+      )}
+      
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/10">
+          <p className="text-xs text-foreground/50">Failed to load</p>
         </div>
       )}
-      <img
-        src={src}
-        alt={alt}
-        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-        onLoad={() => setIsLoaded(true)}
-        loading="eager"
-        decoding="async"
-      />
+      
+      {shouldLoad && (
+        <img
+          src={src}
+          alt={alt}
+          className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+        />
+      )}
     </div>
   );
 };
 
-interface Project {
+// Discriminated union for Project type
+type VideoProject = {
   id: number;
   category: string;
   year: string;
+  mediaType: "video";
   media: string;
-  mediaType: "video" | "image";
+  poster: string;
   featured: boolean;
-  poster?: string;
   link: string;
   description?: string;
+};
+
+type ImageProject = {
+  id: number;
+  category: string;
+  year: string;
+  mediaType: "image";
+  media: string;
+  poster?: never;
+  featured: boolean;
+  link: string;
+  description?: string;
+};
+
+type Project = VideoProject | ImageProject;
+
+interface ProjectCardProps {
+  project: Project;
+  isHovered: boolean;
+  onHover: (id: number | null) => void;
+  onVideoRef: (id: number, el: HTMLVideoElement | null) => void;
 }
 
-const Work = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
-  const containerRef = useRef<HTMLElement>(null);
-  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
+/**
+ * Individual project card component with hover interactions
+ * Memoized to prevent unnecessary re-renders
+ */
+const ProjectCard: React.FC<ProjectCardProps> = React.memo(({ project, isHovered, onHover, onVideoRef }) => {
+  const hoverTimeoutRef = useRef<NodeJS.Timeout>();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const filters = ["All", "Brand Identity Design", "Motion Graphics", "Digital Design"];
+  // Responsive aspect ratio classes
+  const ratioClass = project.featured
+    ? 'pb-[70%] sm:pb-[60%] md:pb-[45%] lg:pb-[40%]'
+    : 'pb-[100%] sm:pb-[80%] md:pb-[70%] lg:pb-[66%]';
 
-  const projects: Project[] = [
-    { 
-      id: 1, 
-      category: "Brand Identity Design", 
-      year: "2024", 
-      media: c, 
-      mediaType: "video", 
-      featured: true, 
-      poster: "/images/posters/c-poster.webp",
-      link: "#", 
-      description: "Complete brand transformation" 
-    },
-    { 
-      id: 2, 
-      category: "Motion Graphics", 
-      year: "2024", 
-      media: recuva, 
-      mediaType: "video", 
-      featured: false, 
-      poster: "/images/posters/recuva-poster.webp",
-      link: "#", 
-      description: "Dynamic motion design" 
-    },
-    { 
-      id: 3, 
-      category: "Brand Identity Design", 
-      year: "2023", 
-      media: hinansho, 
-      mediaType: "image", 
-      featured: true, 
-      link: "#", 
-      description: "Modern brand identity" 
-    },
-    { 
-      id: 4, 
-      category: "Brand Identity Design", 
-      year: "2024", 
-      media: EUPHORIA, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "Creative brand solution" 
-    },
-    { 
-      id: 5, 
-      category: "Brand Identity Design", 
-      year: "2024", 
-      media: ALARABARA, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "Cultural brand design" 
-    },
-    { 
-      id: 6, 
-      category: "Motion Graphics", 
-      year: "2024", 
-      media: bashkim, 
-      mediaType: "video", 
-      featured: true, 
-      poster: "/images/posters/bashkim-poster.webp",
-      link: "#", 
-      description: "Engaging motion graphics" 
-    },
-    { 
-      id: 7, 
-      category: "Digital Design", 
-      year: "2023", 
-      media: instagram, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "Social media design" 
-    },
-    { 
-      id: 8, 
-      category: "Digital Design", 
-      year: "2023", 
-      media: weightx, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "App interface design" 
-    },
-    { 
-      id: 9, 
-      category: "Brand Identity Design", 
-      year: "2024", 
-      media: atinude, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "Minimal brand identity" 
-    },
-    { 
-      id: 10, 
-      category: "Brand Identity Design", 
-      year: "2024", 
-      media: couture, 
-      mediaType: "image", 
-      featured: true, 
-      link: "#", 
-      description: "Luxury brand design" 
-    },
-    { 
-      id: 11, 
-      category: "Digital Design", 
-      year: "2024", 
-      media: fresh, 
-      mediaType: "image", 
-      featured: false, 
-      link: "#", 
-      description: "E-commerce visuals" 
+  // Intersection Observer for card visibility
+  useEffect(() => {
+    if (!cardRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { 
+        rootMargin: "100px",
+        threshold: 0.1
+      }
+    );
+
+    observer.observe(cardRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Debounced hover handler (300ms delay for better performance)
+  const handleMouseEnter = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
     }
-  ];
+    hoverTimeoutRef.current = setTimeout(() => {
+      onHover(project.id);
+    }, 300);
+  }, [project.id, onHover]);
 
-  const filteredProjects = activeFilter === "All" ? projects : projects.filter(p => p.category === activeFilter);
-
-  const handleVideoHover = (projectId: number, shouldPlay: boolean) => {
-    const video = videoRefs.current.get(projectId);
-    if (!video) return;
-
-    if (shouldPlay) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-      video.currentTime = 0;
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
     }
-  };
+    onHover(null);
+  }, [onHover]);
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <section id="portfolio" ref={containerRef} className="py-20 md:py-32 relative overflow-hidden bg-background">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-30" />
-      </div>
-      
-      <div className="container mx-auto max-w-7xl relative z-10 px-4 sm:px-6 lg:px-8">
-        {/* Header - Remove whileInView animations */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-accent/10 backdrop-blur-sm border border-accent/20 rounded-full px-4 py-2 mb-6">
-            <Workflow className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium text-foreground">Portfolio</span>
+    <div
+      ref={cardRef}
+      className={`group relative ${project.featured ? 'md:col-span-2 md:row-span-2' : ''}`}
+    >
+      <div 
+        className="card-hover relative rounded-2xl bg-background/50 border border-border will-change-transform"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Ratio box to control height responsively */}
+        <div className={`${ratioClass} block`} />
+
+        {/* Media - Only render when visible */}
+        {isVisible && (
+          <div className="absolute inset-0 overflow-hidden rounded-2xl">
+            {project.mediaType === "video" ? (
+              <video 
+                ref={(el) => onVideoRef(project.id, el)}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
+                muted
+                loop
+                playsInline 
+                preload="none"
+                poster={project.poster}
+              >
+                <source src={project.media} type="video/webm" />
+              </video> 
+            ) : (
+              <ImageWithLoader 
+                src={project.media} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform" 
+                alt={project.category}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Gradient Overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300 rounded-2xl" />
+
+        {/* Content */}
+        <div className="absolute inset-0 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
+          {/* Top badges */}
+          <div className="flex items-start justify-between gap-2 flex-wrap">
+            <span className="badge">
+              {project.category}
+            </span>
+            <span className="badge-secondary">
+              {project.year}
+            </span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-foreground">
+          {/* Bottom content */}
+          <div>
+            <p className={`text-white/90 text-sm sm:text-base mb-3 sm:mb-4 transition-all duration-300 ${
+              isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`}>
+              {project.description}
+            </p>
+
+            <div className="flex items-center justify-between">
+              <div className="flex-1" />
+              <a
+                href={project.link}
+                className="btn-icon text-white dark:text-black"
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`View ${project.category} project`}
+              >
+                <ArrowUpRight className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for memo - only re-render if these change
+  return (
+    prevProps.project.id === nextProps.project.id &&
+    prevProps.isHovered === nextProps.isHovered
+  );
+});
+
+ProjectCard.displayName = 'ProjectCard';
+
+/**
+ * Pagination button component
+ */
+interface PaginationButtonProps {
+  page: number;
+  currentPage: number;
+  onClick: (page: number) => void;
+}
+
+const PaginationButton: React.FC<PaginationButtonProps> = React.memo(({ page, currentPage, onClick }) => {
+  const isActive = currentPage === page;
+  
+  return (
+    <button
+      onClick={() => onClick(page)}
+      className={`btn-pagination ${
+        isActive
+          ? 'bg-white dark:bg-white text-white dark:text-black border-accent shadow-lg'
+          : 'border-border bg-background/80 backdrop-blur-sm hover:border-accent hover:bg-accent/10 text-foreground'
+      }`}
+      style={isActive ? { color: 'white' } : undefined}
+      aria-label={`Page ${page}`}
+      aria-current={isActive ? 'page' : undefined}
+    >
+      {page}
+    </button>
+  );
+});
+
+PaginationButton.displayName = 'PaginationButton';
+
+/**
+ * Main Work component with portfolio projects
+ */
+const Work: React.FC = () => {
+  // State management
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Refs
+  const containerRef = useRef<HTMLElement>(null);
+  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
+  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const transitionTimeoutRef = useRef<NodeJS.Timeout>();
+  const previousPageRef = useRef(1); // Track previous page to detect actual changes
+
+  /**
+   * Filter projects based on active filter
+   */
+  const filteredProjects = useMemo(
+    () => activeFilter === "All" ? PROJECTS : PROJECTS.filter(p => p.category === activeFilter),
+    [activeFilter]
+  );
+
+  /**
+   * Calculate total pages for pagination
+   */
+  const totalPages = useMemo(
+    () => Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE),
+    [filteredProjects.length]
+  );
+
+  /**
+   * Get current page projects with memoization
+   */
+  const currentProjects = useMemo(() => {
+    const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+    const endIndex = startIndex + PROJECTS_PER_PAGE;
+    return filteredProjects.slice(startIndex, endIndex);
+  }, [filteredProjects, currentPage]);
+
+  /**
+   * Memoize pagination page numbers
+   */
+  const pageNumbers = useMemo(
+    () => Array.from({ length: totalPages }, (_, i) => i + 1),
+    [totalPages]
+  );
+
+  /**
+   * Throttled filter change handler
+   */
+  const handleFilterChange = useCallback((filter: string) => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setActiveFilter(filter);
+    
+    // Clear transition lock after animation
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 300);
+  }, [isTransitioning]);
+
+  /**
+   * Reset to page 1 and pause videos when filter changes
+   */
+  useEffect(() => {
+    setCurrentPage(1);
+    previousPageRef.current = 1; // Reset previous page
+    
+    // Batch pause operations using requestAnimationFrame
+    requestAnimationFrame(() => {
+      videoRefs.current.forEach((video) => {
+        try {
+          video.pause();
+          video.currentTime = 0;
+        } catch (error) {
+          console.warn('Failed to pause video:', error);
+        }
+      });
+    });
+  }, [activeFilter]);
+
+  /**
+   * Scroll to top when page changes (only when user clicks pagination)
+   */
+  useEffect(() => {
+   
+    if (previousPageRef.current === currentPage) {
+      return;
+    }
+
+    // Update previous page
+    previousPageRef.current = currentPage;
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (containerRef.current) {
+        const yOffset = -100;
+        const y = containerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 150);
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [currentPage]);
+
+  /**
+   * Handle video hover with safe play/pause and throttling
+   */
+  const handleVideoHover = useCallback((projectId: number | null) => {
+    // Use requestAnimationFrame for smoother video operations
+    requestAnimationFrame(() => {
+      if (projectId === null) {
+        videoRefs.current.forEach((video) => {
+          try {
+            video.pause();
+            video.currentTime = 0;
+          } catch (error) {
+            console.warn('Failed to pause video:', error);
+          }
+        });
+      } else {
+        const video = videoRefs.current.get(projectId);
+        if (video) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.debug('Video play prevented:', error);
+            });
+          }
+        }
+      }
+    });
+  }, []);
+
+  /**
+   * Update video refs callback
+   */
+  const handleVideoRef = useCallback((id: number, el: HTMLVideoElement | null) => {
+    if (el) {
+      videoRefs.current.set(id, el);
+    } else {
+      videoRefs.current.delete(id);
+    }
+  }, []);
+
+  /**
+   * Handle project hover state with throttling
+   */
+  const handleProjectHover = useCallback((id: number | null) => {
+    setHoveredProject(id);
+    handleVideoHover(id);
+  }, [handleVideoHover]);
+
+  /**
+   * Handle pagination page change with transition lock
+   */
+  const handlePageChange = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages && !isTransitioning) {
+      setIsTransitioning(true);
+      setCurrentPage(page);
+      
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      transitionTimeoutRef.current = setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }
+  }, [totalPages, isTransitioning]);
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <section 
+      id="portfolio" 
+      ref={containerRef} 
+      className="section-padding relative overflow-hidden bg-background"
+    >
+      {/* Background Pattern */}
+      <div className="section-pattern" style={{ willChange: 'auto' }} />
+      
+      <div className="container mx-auto max-w-7xl relative z-10 px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-14 md:mb-16 lg:mb-16">
+          <div className="inline-flex items-center gap-2  backdrop-blur-sm border border-accent/20 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-6">
+            <Workflow className="w-4 h-4 text-accent" />
+            <span className="text-xs sm:text-sm font-medium text-foreground">Portfolio</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-foreground">
             Featured Works
           </h2>
 
-          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-foreground-secondary max-w-2xl mx-auto">
             A selection of projects showcasing strategic thinking and creative execution
           </p>
         </div>
 
-        {/* Filter Tabs - Remove animations */}
-        <div className="mb-12">
-          <div className="flex justify-center">
-            <div className="inline-flex flex-wrap gap-2 p-2 bg-background/80 backdrop-blur-sm border border-border rounded-2xl">
-              {filters.map((filter) => (
+        {/* Filter Tabs */}
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <div className="w-full overflow-x-auto">
+            <div 
+              className="min-w-max mx-auto inline-flex gap-2 p-2 bg-background/80 backdrop-blur-sm border border-border rounded-2xl"
+              role="tablist"
+              aria-label="Project filters"
+            >
+              {FILTERS.map((filter) => (
                 <button
                   key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={`px-5 py-2.5 text-sm font-medium transition-all duration-200 rounded-xl ${
+                  onClick={() => handleFilterChange(filter)}
+                  disabled={isTransitioning}
+                  className={`btn-filter ${
                     activeFilter === filter 
-                      ? 'bg-accent text-white shadow-lg' 
+                      ? 'bg-accent text-black dark:text-white shadow-lg' 
                       : 'text-foreground-secondary hover:text-foreground hover:bg-background/50'
-                  }`}
+                  } ${isTransitioning ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  role="tab"
+                  aria-selected={activeFilter === filter}
+                  aria-controls="projects-grid"
                 >
                   {filter}
                 </button>
@@ -245,99 +533,73 @@ const Work = () => {
           </div>
         </div>
 
-        {/* Projects Grid - Simplified animations */}
-        <motion.div 
-          key={activeFilter}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        {/* Projects Grid */}
+        <div 
+          id="projects-grid"
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-h-[400px] ${
+            isTransitioning ? 'pointer-events-none' : ''
+          }`}
+          style={{
+            opacity: isTransitioning ? 0.7 : 1,
+            transition: 'opacity 0.2s ease-in-out',
+          }}
+          role="tabpanel"
         >
-          {filteredProjects.map((project) => (
-            <div
+          {currentProjects.map((project) => (
+            <ProjectCard
               key={project.id}
-              className={`group relative ${
-                project.featured ? 'md:col-span-2 md:row-span-2' : ''
-              }`}
-            >
-              <div 
-                className={`relative overflow-hidden rounded-2xl bg-background/50 border border-border ${
-                  project.featured ? 'h-[500px] md:h-full' : 'h-[400px]'
-                }`}
-                onMouseEnter={() => {
-                  setHoveredProject(project.id);
-                  handleVideoHover(project.id, true);
-                }}
-                onMouseLeave={() => {
-                  setHoveredProject(null);
-                  handleVideoHover(project.id, false);
-                }}
-              >
-                {/* Media */}
-                <div className="absolute inset-0">
-                  {project.mediaType === "video" ? (
-                    <video 
-                      ref={(el) => {
-                        if (el) videoRefs.current.set(project.id, el);
-                      }}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      muted
-                      loop
-                      playsInline 
-                      preload="auto"
-                      poster={project.poster}
-                    >
-                      <source src={project.media} type="video/webm" />
-                      Your browser does not support the video tag.
-                    </video> 
-                  ) : (
-                    <ImageWithLoader 
-                      src={project.media} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                      alt={project.category}
-                    />
-                  )}
-                </div>
-
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-                {/* Content */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-between">
-                  {/* Top badges */}
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md text-xs font-medium text-foreground rounded-full border border-border">
-                      {project.category}
-                    </span>
-                    <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md text-xs font-medium text-foreground-secondary rounded-full border border-border">
-                      {project.year}
-                    </span>
-                  </div>
-
-                  {/* Bottom content */}
-                  <div>
-                    <p className={`text-white/90 text-sm mb-4 transition-all duration-300 ${
-                      hoveredProject === project.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                    }`}>
-                      {project.description}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1" />
-                      <a
-                        href={project.link}
-                        className="w-12 h-12 rounded-full bg-accent hover:bg-accent/90 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ArrowUpRight className="w-5 h-5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              project={project}
+              isHovered={hoveredProject === project.id}
+              onHover={handleProjectHover}
+              onVideoRef={handleVideoRef}
+            />
           ))}
-        </motion.div>
+        </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <nav 
+            className="flex items-center justify-center gap-2 mt-10 sm:mt-12"
+            aria-label="Pagination navigation"
+          >
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1 || isTransitioning}
+              className="btn-nav"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {pageNumbers.map((page) => (
+                <PaginationButton
+                  key={page}
+                  page={page}
+                  currentPage={currentPage}
+                  onClick={handlePageChange}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages || isTransitioning}
+              className="btn-nav"
+              aria-label="Next page"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </nav>
+        )}
+
+        {/* Project Count */}
+        <div className="text-center mt-6">
+          <p className="text-sm text-foreground-secondary" aria-live="polite">
+            Showing {currentProjects.length} of {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
+            {totalPages > 1 && ` • Page ${currentPage} of ${totalPages}`}
+          </p>
+        </div>
       </div>
     </section>
   );

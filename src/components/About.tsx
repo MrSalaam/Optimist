@@ -9,8 +9,7 @@ import {
   Zap,
   Rocket
 } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 const sectionHeaders = {
   about: {
@@ -24,7 +23,7 @@ const skills = [
   { name: "Brand Identity Design", level: 95 },
   { name: "Illustrations", level: 98 },
   { name: "Digital Design", level: 99 },
-  { name: "Pritings", level: 98 },
+  { name: "Printings", level: 98 },
   { name: "Motion Graphics", level: 95 },
 ];
 
@@ -54,27 +53,15 @@ const About = () => {
   const aboutHeader = sectionHeaders.about;
   const AboutIcon = aboutHeader.icon;
 
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-
   return (
-    <section id="about" ref={containerRef} className="py-12 sm:py-16 md:py-20 lg:py-32 bg-background relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-30" />
-        
-        {/* Floating elements */}
-        <motion.div style={{ y: y1 }} className="absolute top-1/4 left-10 w-20 h-20 bg-accent/5 rounded-full blur-xl" />
-        <motion.div style={{ y: y2 }} className="absolute bottom-1/3 right-16 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
-      </div>
-
-      <div className="container-portfolio relative z-10 px-4 sm:px-6">
+    <section 
+      id="about" 
+      className="section-padding relative overflow-hidden bg-background"
+    >
+      {/* Background Pattern */}
+      <div className="section-pattern" style={{ willChange: 'auto' }} />
+      
+      <div className="container mx-auto max-w-7xl relative z-10 px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -94,24 +81,10 @@ const About = () => {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
               }}
-              className="inline-flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 shadow-sm"
+              className="inline-flex items-center gap-2 bg-accent/10 backdrop-blur-sm border border-accent/20 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-6"
             >
-              <div className="relative">
-                <motion.div
-                  className={`absolute -inset-1 bg-${aboutHeader.color}-400/30 rounded-full blur-sm`}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.5, 0.8, 0.5],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-                <AboutIcon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-${aboutHeader.color}-400 relative`} />
-              </div>
-              <span className="text-xs sm:text-sm font-medium text-foreground-secondary">{aboutHeader.text}</span>
+              <AboutIcon className="w-4 h-4 text-accent" />
+              <span className="text-xs sm:text-sm font-medium text-foreground">{aboutHeader.text}</span>
             </motion.div>
 
             <motion.h2
@@ -154,7 +127,7 @@ const About = () => {
             >
               <p className="text-lg text-foreground-secondary leading-relaxed">
                 A designer dedicated to helping brands tell their unique stories 
-                through compelling visual design. With over 3 years of experience, I specialize in creating 
+                through compelling visual design. With over 5 years of experience, I specialize in creating 
                 brand identities that not only look stunning but also drive measurable business results.
               </p>
               <p className="text-lg text-foreground-secondary leading-relaxed">
@@ -170,7 +143,7 @@ const About = () => {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.6 } },
               }}
-              className="flex flex-col sm:flex-row gap-4 pt-4 "
+              className="flex flex-col sm:flex-row gap-4 pt-4"
             >
               <Button size="lg" asChild className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5">
                 <a
@@ -204,13 +177,19 @@ const About = () => {
             > 
               {coreValues.map((value) => {
                 const Icon = value.icon;
-                return (<motion.div key={value.title} whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }} className="flex items-center gap-3 p-4 bg-background/50 rounded-xl border border-border transition-all duration-300">
-                  <Icon className="w-5 h-5 text-accent flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-foreground text-sm">{value.title}</h4>
-                    <p className="text-xs text-foreground-secondary">{value.description}</p>
-                  </div>
-                </motion.div>)
+                return (
+                  <motion.div 
+                    key={value.title} 
+                    whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }} 
+                    className="flex items-center gap-3 p-4 bg-background/50 rounded-xl border border-border transition-all duration-300"
+                  >
+                    <Icon className="w-5 h-5 text-accent flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-foreground text-sm">{value.title}</h4>
+                      <p className="text-xs text-foreground-secondary">{value.description}</p>
+                    </div>
+                  </motion.div>
+                );
               })}
             </motion.div>
           </motion.div>

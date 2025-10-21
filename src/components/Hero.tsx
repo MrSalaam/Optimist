@@ -24,7 +24,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="h-full relative w-full bg-background">
+    <div id="home" className="h-full relative w-full bg-background">
       <div className="h-full relative overflow-hidden">
         {/* Enhanced Background Elements */}
         <div className=" h-full absolute inset-0">
