@@ -52,6 +52,10 @@
     --theme-transition: background-color 0.2s ease-in-out, 
                        border-color 0.2s ease-in-out, 
                        color 0.2s ease-in-out;
+
+    /* Safe area insets for notched devices */
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
   }
 
   .dark {
@@ -99,6 +103,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    padding-top: var(--safe-area-inset-top);
+    padding-bottom: var(--safe-area-inset-bottom);
   }
 
   /* Typography Scale */

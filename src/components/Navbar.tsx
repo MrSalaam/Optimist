@@ -152,6 +152,7 @@ const Navbar = () => {
 								className="lg:hidden w-10 h-10 rounded-full bg-accent/10 hover:bg-accent/20 flex items-center justify-center transition-colors relative z-50"
 								aria-label="Toggle menu"
 								aria-expanded={isMobileMenuOpen}
+								aria-controls="mobile-menu"
 							>
 								{isMobileMenuOpen ? (
 									<X className="w-5 h-5 text-accent" />
@@ -175,6 +176,7 @@ const Navbar = () => {
 
 			{/* Mobile Menu */}
 			<div
+				id="mobile-menu"
 				className={`lg:hidden fixed top-16 sm:top-20 right-0 bottom-0 w-full sm:w-80 bg-background border-l border-border shadow-2xl z-40 transition-transform duration-300 ease-out ${
 					isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
 				}`}

@@ -81,7 +81,7 @@ const About = () => {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
               }}
-              className="inline-flex items-center gap-2 bg-accent/10 backdrop-blur-sm border border-accent/20 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-6"
+              className="inline-flex items-center gap-2  backdrop-blur-sm border border-accent/20 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-6"
             >
               <AboutIcon className="w-4 h-4 text-accent" />
               <span className="text-xs sm:text-sm font-medium text-foreground">{aboutHeader.text}</span>
@@ -203,7 +203,7 @@ const About = () => {
             className="space-y-8"
           >
             {/* Achievement Stats */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 px-2 sm:px-0">
               {achievements.map((achievement, index) => {
                 const Icon = achievement.icon;
                 return (

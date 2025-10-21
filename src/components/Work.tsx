@@ -187,7 +187,8 @@ const ProjectCard: React.FC<ProjectCardProps> = React.memo(({ project, isHovered
                 muted
                 loop
                 playsInline 
-                preload="none"
+                autoPlay
+                preload="metadata"
                 poster={project.poster}
               >
                 <source src={project.media} type="video/webm" />
@@ -297,7 +298,7 @@ const Work: React.FC = () => {
   const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
   const scrollTimeoutRef = useRef<NodeJS.Timeout>();
   const transitionTimeoutRef = useRef<NodeJS.Timeout>();
-  const previousPageRef = useRef(1); // Track previous page to detect actual changes
+  const previousPageRef = useRef(1);
 
   /**
    * Filter projects based on active filter
@@ -341,7 +342,6 @@ const Work: React.FC = () => {
     setIsTransitioning(true);
     setActiveFilter(filter);
     
-    // Clear transition lock after animation
     if (transitionTimeoutRef.current) {
       clearTimeout(transitionTimeoutRef.current);
     }
@@ -351,35 +351,21 @@ const Work: React.FC = () => {
   }, [isTransitioning]);
 
   /**
-   * Reset to page 1 and pause videos when filter changes
+   * Reset to page 1 when filter changes
    */
   useEffect(() => {
     setCurrentPage(1);
-    previousPageRef.current = 1; // Reset previous page
-    
-    // Batch pause operations using requestAnimationFrame
-    requestAnimationFrame(() => {
-      videoRefs.current.forEach((video) => {
-        try {
-          video.pause();
-          video.currentTime = 0;
-        } catch (error) {
-          console.warn('Failed to pause video:', error);
-        }
-      });
-    });
+    previousPageRef.current = 1;
   }, [activeFilter]);
 
   /**
-   * Scroll to top when page changes (only when user clicks pagination)
+   * Scroll to top when page changes
    */
   useEffect(() => {
-   
     if (previousPageRef.current === currentPage) {
       return;
     }
 
-    // Update previous page
     previousPageRef.current = currentPage;
 
     if (scrollTimeoutRef.current) {
@@ -402,52 +388,29 @@ const Work: React.FC = () => {
   }, [currentPage]);
 
   /**
-   * Handle video hover with safe play/pause and throttling
-   */
-  const handleVideoHover = useCallback((projectId: number | null) => {
-    // Use requestAnimationFrame for smoother video operations
-    requestAnimationFrame(() => {
-      if (projectId === null) {
-        videoRefs.current.forEach((video) => {
-          try {
-            video.pause();
-            video.currentTime = 0;
-          } catch (error) {
-            console.warn('Failed to pause video:', error);
-          }
-        });
-      } else {
-        const video = videoRefs.current.get(projectId);
-        if (video) {
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch((error) => {
-              console.debug('Video play prevented:', error);
-            });
-          }
-        }
-      }
-    });
-  }, []);
-
-  /**
    * Update video refs callback
    */
   const handleVideoRef = useCallback((id: number, el: HTMLVideoElement | null) => {
     if (el) {
       videoRefs.current.set(id, el);
+      // Auto-play when video is mounted
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.debug('Video autoplay prevented:', error);
+        });
+      }
     } else {
       videoRefs.current.delete(id);
     }
   }, []);
 
   /**
-   * Handle project hover state with throttling
+   * Handle project hover state (only for description visibility now)
    */
   const handleProjectHover = useCallback((id: number | null) => {
     setHoveredProject(id);
-    handleVideoHover(id);
-  }, [handleVideoHover]);
+  }, []);
 
   /**
    * Handle pagination page change with transition lock
@@ -508,7 +471,7 @@ const Work: React.FC = () => {
         <div className="mb-8 sm:mb-10 md:mb-12">
           <div className="w-full overflow-x-auto">
             <div 
-              className="min-w-max mx-auto inline-flex gap-2 p-2 bg-background/80 backdrop-blur-sm border border-border rounded-2xl"
+              className="min-w-max mx-auto inline-flex gap-2 p-2 bg-background/80 backdrop-blur-sm border border-border rounded-full"
               role="tablist"
               aria-label="Project filters"
             >
@@ -519,7 +482,7 @@ const Work: React.FC = () => {
                   disabled={isTransitioning}
                   className={`btn-filter ${
                     activeFilter === filter 
-                      ? 'bg-accent text-black dark:text-white shadow-lg' 
+                      ? 'bg-accent text-white dark:text-black shadow-lg' 
                       : 'text-foreground-secondary hover:text-foreground hover:bg-background/50'
                   } ${isTransitioning ? 'opacity-50 cursor-not-allowed' : ''}`}
                   role="tab"
@@ -594,8 +557,12 @@ const Work: React.FC = () => {
         )}
 
         {/* Project Count */}
-        <div className="text-center mt-6">
-          <p className="text-sm text-foreground-secondary" aria-live="polite">
+        <div 
+          className="text-center mt-6"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="text-sm text-foreground-secondary">
             Showing {currentProjects.length} of {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
             {totalPages > 1 && ` • Page ${currentPage} of ${totalPages}`}
           </p>

@@ -243,6 +243,14 @@ const Hero = () => {
         </span>
         <ArrowDown className="w-6 h-6 text-accent group-hover:text-accent/80 transition-colors duration-200" />
       </motion.div>
+
+      {/* Skip to main content link - Screen Reader Only, but becomes visible on focus */}
+      <a 
+        href="#about" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-white focus:rounded-lg"
+      >
+        Skip to main content
+      </a>
     </div>
   );
 };

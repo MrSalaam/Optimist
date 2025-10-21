@@ -7,7 +7,7 @@ const Partnership = () => {
 
   const testimonials = [
     {
-      quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand’s essence. Professional, creative, and always on time—couldn’t ask for more! Highly recommend his services.",
+      quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand's essence. Professional, creative, and always on time—couldn't ask for more! Highly recommend his services.",
       author: "Olusegun Joel-Alabi",
       title: "CEO, Makkan Innovation",
       initials: "OJA"
@@ -19,7 +19,7 @@ const Partnership = () => {
       initials: "A"
     },
     {
-      quote: "His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We’re excited for more opportunities to collaborate with him.",
+      quote: "His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We're excited for more opportunities to collaborate with him.",
       author: "Cornerstone Ephraim",
       title: "Co-Founder, ATINUADE",
       initials: "CE"
@@ -119,7 +119,7 @@ const Partnership = () => {
             >
               <div className="relative">
                 <motion.div
-                  className="absolute -inset-1 bg-blue-400/30 rounded-full blur-sm"
+                  className="absolute -inset-1 rounded-full blur-sm"
                   animate={{
                     scale: [1, 1.2, 1],
                     opacity: [0.5, 0.8, 0.5],
@@ -130,7 +130,7 @@ const Partnership = () => {
                     ease: "easeInOut",
                   }}
                 />
-                <Handshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400 relative" />
+                <Handshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent relative" />
               </div>
               <span className="text-xs sm:text-sm font-medium text-foreground-secondary">Partnerships</span>
             </motion.div>
@@ -260,8 +260,11 @@ const Partnership = () => {
                   {/* Testimonial Content */}
                   <blockquote className="mb-6 sm:mb-8 md:mb-10 relative">
                     <motion.p 
-                      className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-foreground italic leading-relaxed font-light max-w-4xl mx-auto text-center px-4 sm:px-6 md:px-8"
-                      style={{ textWrap: "balance" }}
+                      className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-foreground italic leading-relaxed font-light max-w-4xl mx-auto text-center px-4 sm:px-6 md:px-8"
+                      style={{ 
+                        textWrap: "balance",
+                        wordBreak: "break-word" // ADD THIS for very long words
+                      }}
                     >
                       {activeTestimonial.quote}
                     </motion.p>
