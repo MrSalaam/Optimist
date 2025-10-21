@@ -128,7 +128,7 @@ const Contact = () => {
     setFormStatus("loading");
 
     try {
-      // Your API call here
+      
       setTimeout(() => {
         setFormStatus("success");
         setFormData({ name: "", email: "", subject: "", message: "" });
