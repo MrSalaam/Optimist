@@ -30,7 +30,7 @@ const skills = [
 const achievements = [
   {
     icon: Award,
-    number: "5+",
+    number: "4",
     label: "Years of Experience",
     description: "in design and branding",
   },
@@ -126,7 +126,7 @@ const About = () => {
               >
                 <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed">
                   A designer dedicated to helping brands tell their unique stories 
-                  through compelling visual design. With over 5 years of experience, I specialize in creating 
+                  through compelling visual design. With  4 years of experience, I specialize in creating 
                   brand identities that not only look stunning but also drive measurable business results.
                 </p>
                 <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed">

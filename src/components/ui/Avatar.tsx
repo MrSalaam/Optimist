@@ -2,17 +2,18 @@ import { memo } from "react";
 
 interface AvatarProps {
   name: string;
-  initials: string;
+  initials?: string;
   imageUrl?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
 const Avatar = memo(({ name, initials, imageUrl, size = "md", className = "" }: AvatarProps) => {
   const sizeClasses = {
     sm: "w-10 h-10 text-sm",
-    md: "w-12 h-12 sm:w-14 sm:h-14 text-base sm:text-lg",
-    lg: "w-16 h-16 sm:w-20 sm:h-20 text-lg sm:text-xl"
+    md: "w-16 h-16 sm:w-20 sm:h-20 text-lg sm:text-xl",
+    lg: "w-20 h-20 sm:w-24 sm:h-24 text-xl sm:text-2xl",
+    xl: "w-24 h-24 sm:w-28 sm:h-28 text-2xl sm:text-3xl"
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -38,7 +39,7 @@ const Avatar = memo(({ name, initials, imageUrl, size = "md", className = "" }: 
         className="absolute inset-0 bg-gradient-to-br from-accent to-accent/80 rounded-2xl flex items-center justify-center"
         style={{ display: imageUrl ? 'none' : 'flex' }}
       >
-        <span className="font-bold text-white dark:text-black">{initials}</span>
+        <span className="font-bold text-white dark:text-black">{initials || name.charAt(0).toUpperCase()}</span>
       </div>
     </div>
   );

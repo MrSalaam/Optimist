@@ -6,7 +6,6 @@ import myImage from '@/assets/images/hero.webp';
 
 const Hero = memo(() => {
   const handleScrollToNext = useCallback(() => {
-    // Try to find the next section - adjust these selectors based on your actual page structure
     const nextSection = document.getElementById('about') || 
                        document.getElementById('portfolio') || 
                        document.getElementById('services') ||
@@ -16,7 +15,6 @@ const Hero = memo(() => {
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // If no specific section found, scroll down by viewport height
       window.scrollTo({
         top: window.innerHeight,
         behavior: 'smooth'
@@ -27,7 +25,6 @@ const Hero = memo(() => {
   return (
     <div id="home" className="h-full relative w-full bg-background">
       <div className="h-full relative overflow-hidden">
-        {/* Enhanced Background Elements */}
         <div className=" h-full absolute inset-0">
           {/* Grid pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:50px_50px] opacity-30" />

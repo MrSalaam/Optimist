@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, memo, useCallback } from "react";
 import { Handshake, ChevronLeft, ChevronRight } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
-import { generateUIAvatarUrl } from "@/utils/avatar";
 
 const Partnership = memo(() => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -10,24 +9,33 @@ const Partnership = memo(() => {
   const testimonials = [
     {
       quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand's essence. Professional, creative, and always on time—couldn't ask for more! Highly recommend his services.",
-      author: "Olusegun Joel-Alabi",
+      author: "Olusegun JOEL-ALABI",
       title: "CEO, Makkan Innovation",
-      initials: "OJA",
-      image: generateUIAvatarUrl("OJA", "Olusegun Joel-Alabi")
+      image: "/images/testimonials/segun.jpg"
     },
     {
-      quote: "Ayilara S. has been instrumental in enhancing the visual appeal of our brand",
-      author: "ATINUADE",
-      title: "ATINUADE Brand Team",
-      initials: "A",
-      image: generateUIAvatarUrl("A", "ATINUADE")
+      quote: "Mr. Ayilara is an outstanding graphics designer. I’ve given him multiple design tasks, and he consistently delivers high-quality work on time and beyond expectations. He created an exceptional brand identity for my startup, capturing the vision perfectly. He is reliable, creative, and professional, I highly recommend him for any design or branding project.",
+      author: "Elijah OYINDAMOLA",
+      title: "Product Designer and Startup Founder",
+      image: "/images/testimonials/elitech.png"
     },
     {
-      quote: "His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We're excited for more opportunities to collaborate with him.",
-      author: "Cornerstone Ephraim",
+      quote: "Ayilara S. has been instrumental in enhancing the visual appeal of our brand - ATINUDA. His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We’re excited for more opportunities to collaborate with him.",
+      author: "Cornerstone EPHRAIM",
       title: "Co-Founder, ATINUADE",
-      initials: "CE",
-      image: generateUIAvatarUrl("CE", "Cornerstone Ephraim")
+      image: "/images/testimonials/cornerstone.jpg"
+    },
+    {
+      quote: "Working with Ayilara has been one of the best creative experiences in my real estate journey. He has this rare gift of turning ideas and concepts into designs that breathe life into our vision. Every project we’ve done together reflects not just skill, but understanding, he created the Hinansho brand identity to begin and then delivers visuals that speak directly to people’s emotions. If you ever need a designer who can deliver your vision and exceptional creativity with your brand identity, Ayilara is the one",
+      author: "Aminu Faruq OLAMIDE",
+      title: "CEO and founder, Hinansho Real Estate",
+      image: "/images/testimonials/aminu.jpg"
+    },
+    {
+      quote: "Working with Mr. Ayilara Sodiq has been an absolute pleasure. His ability to grasp our ideas quickly and translate them into visually stunning designs is truly commendable. He’s a talented and reliable professional, an incredible asset to any team.",
+      author: "Ehiem Chioma",
+      title: "Team lead marketing Makkan Innovation",
+      image: "/images/testimonials/chioma.jpg"
     }
   ];
 
@@ -276,16 +284,15 @@ const Partnership = memo(() => {
                   </blockquote>
 
                   {/* Author Info */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
                     <Avatar 
                       name={activeTestimonial.author}
-                      initials={activeTestimonial.initials}
                       imageUrl={activeTestimonial.image}
-                      size="md"
+                      size="lg"
                     />
                     <div className="text-center sm:text-left">
-                      <p className="font-semibold text-foreground text-base sm:text-lg">{activeTestimonial.author}</p>
-                      <p className="text-foreground-secondary text-sm sm:text-base">{activeTestimonial.title}</p>
+                      <p className="font-semibold text-foreground text-lg sm:text-xl">{activeTestimonial.author}</p>
+                      <p className="text-foreground-secondary text-base sm:text-lg">{activeTestimonial.title}</p>
                     </div>
                   </div>
                 </motion.div>

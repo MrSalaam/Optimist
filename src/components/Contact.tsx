@@ -52,13 +52,13 @@ const socialLinks = [
   {
     name: "LinkedIn",
     icon: Linkedin,
-    href: "https://linkedin.com/in/ayilaraadekunlesodiq",
+    href: "https://www.linkedin.com/in/ayilara-adekunle-sodiq-36a39a207/",
     color: "hover:text-[#0A66C2]",
   },
   {
     name: "Behance",
     icon: null, // Custom SVG below
-    href: "https://behance.net/ayilarasodiq",
+    href: "https://behance.net/saayilara",
     color: "hover:text-[#1769FF]",
     customSvg: (
       <svg
