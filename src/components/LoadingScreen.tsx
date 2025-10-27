@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "@/components/context/ThemeContext";
+import { useTheme } from "@/hooks/useTheme";
 
-const LoadingScreen = () => {
+const LoadingScreen = memo(() => {
   const { theme } = useTheme();
 
   const letters = "WELCOME".split("");
@@ -124,6 +125,8 @@ const LoadingScreen = () => {
       </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+LoadingScreen.displayName = "LoadingScreen";
 
 export default LoadingScreen;

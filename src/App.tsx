@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, memo } from "react";
 import { ThemeProvider } from "@/components/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import { AnimatePresence } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 
+// Lazy load components with better chunking
 const Hero = lazy(() => import("@/components/Hero"));
 const Work = lazy(() => import("@/components/Work"));
 const About = lazy(() => import("@/components/About"));
@@ -11,14 +12,21 @@ const Services = lazy(() => import("@/components/Services"));
 const Partnership = lazy(() => import("@/components/Partnership"));
 const Contact = lazy(() => import("@/components/Contact"));
 
+// Optimized loading component
+const LoadingFallback = memo(() => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+  </div>
+));
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time
+    // Reduce loading time for better UX
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // 3 seconds
+    }, 1500); // Reduced from 3 seconds to 1.5 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -44,11 +52,7 @@ function App() {
               <Navbar />
               <AnimatePresence mode="wait">
                 <main>
-                  <Suspense fallback={
-                    <div className="flex items-center justify-center min-h-screen">
-                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
-                    </div>
-                  }>
+                  <Suspense fallback={<LoadingFallback />}>
                     <Hero />
                     <About />
                     <Services />

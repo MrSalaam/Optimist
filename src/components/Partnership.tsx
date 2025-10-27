@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, memo, useCallback } from "react";
 import { Handshake, ChevronLeft, ChevronRight } from "lucide-react";
+import Avatar from "@/components/ui/Avatar";
+import { generateUIAvatarUrl } from "@/utils/avatar";
 
-const Partnership = () => {
+const Partnership = memo(() => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const testimonials = [
@@ -10,19 +12,22 @@ const Partnership = () => {
       quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand's essence. Professional, creative, and always on time—couldn't ask for more! Highly recommend his services.",
       author: "Olusegun Joel-Alabi",
       title: "CEO, Makkan Innovation",
-      initials: "OJA"
+      initials: "OJA",
+      image: generateUIAvatarUrl("OJA", "Olusegun Joel-Alabi")
     },
     {
       quote: "Ayilara S. has been instrumental in enhancing the visual appeal of our brand",
       author: "ATINUADE",
       title: "ATINUADE Brand Team",
-      initials: "A"
+      initials: "A",
+      image: generateUIAvatarUrl("A", "ATINUADE")
     },
     {
       quote: "His ability to translate ideas into compelling, high-quality graphics is truly impressive. He is reliable, creative, and consistently delivers outstanding work. We're excited for more opportunities to collaborate with him.",
       author: "Cornerstone Ephraim",
       title: "Co-Founder, ATINUADE",
-      initials: "CE"
+      initials: "CE",
+      image: generateUIAvatarUrl("CE", "Cornerstone Ephraim")
     }
   ];
 
@@ -76,15 +81,15 @@ const Partnership = () => {
     };
   }, [currentTestimonial, testimonials.length]);
 
-  const handlePrevTestimonial = () => {
+  const handlePrevTestimonial = useCallback(() => {
     setCurrentTestimonial(
       (prev) => (prev - 1 + testimonials.length) % testimonials.length
     );
-  };
+  }, [testimonials.length]);
 
-  const handleNextTestimonial = () => {
+  const handleNextTestimonial = useCallback(() => {
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
   
   return (
     <section id="partnerships" ref={containerRef} className="py-12 sm:py-16 md:py-20 lg:py-32 bg-background relative overflow-hidden">
@@ -272,11 +277,12 @@ const Partnership = () => {
 
                   {/* Author Info */}
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-                    <div className="relative">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-accent rounded-2xl flex items-center justify-center relative">
-                        <span className="text-base sm:text-lg font-bold text-white dark:text-black">{activeTestimonial.initials}</span>
-                      </div>
-                    </div>
+                    <Avatar 
+                      name={activeTestimonial.author}
+                      initials={activeTestimonial.initials}
+                      imageUrl={activeTestimonial.image}
+                      size="md"
+                    />
                     <div className="text-center sm:text-left">
                       <p className="font-semibold text-foreground text-base sm:text-lg">{activeTestimonial.author}</p>
                       <p className="text-foreground-secondary text-sm sm:text-base">{activeTestimonial.title}</p>
@@ -309,6 +315,8 @@ const Partnership = () => {
       </div>
     </section>
   );
-};
+});
+
+Partnership.displayName = "Partnership";
 
 export default Partnership;

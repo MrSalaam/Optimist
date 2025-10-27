@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { useTheme } from "@/components/context/ThemeContext";
+import { useTheme } from "@/hooks/useTheme";
 import ThemeToggle from "@/components/ThemeToggle";
+import { throttle } from "@/utils/performance";
 
 const navLinks = [
 	{ href: "#home", label: "Home" },
@@ -10,15 +11,15 @@ const navLinks = [
 	{ href: "#portfolio", label: "Work" },
 ];
 
-const Navbar = () => {
+const Navbar = memo(() => {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [activeSection, setActiveSection] = useState("home");
 	const { theme } = useTheme();
 
-	// Handle scroll
+	// Handle scroll with throttling for better performance
 	useEffect(() => {
-		const handleScroll = () => {
+		const handleScroll = throttle(() => {
 			setIsScrolled(window.scrollY > 50);
 
 			// Determine active section
@@ -35,9 +36,9 @@ const Navbar = () => {
 			if (current) {
 				setActiveSection(current);
 			}
-		};
+		}, 16); // ~60fps
 
-		window.addEventListener("scroll", handleScroll);
+		window.addEventListener("scroll", handleScroll, { passive: true });
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
@@ -54,18 +55,18 @@ const Navbar = () => {
 		};
 	}, [isMobileMenuOpen]);
 
-	const handleNavClick = (href: string) => {
+	const handleNavClick = useCallback((href: string) => {
 		setIsMobileMenuOpen(false);
 		const element = document.querySelector(href);
 		if (element) {
 			element.scrollIntoView({ behavior: "smooth" });
 		}
-	};
+	}, []);
 
-	const toggleMobileMenu = (e: React.MouseEvent) => {
+	const toggleMobileMenu = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
 		setIsMobileMenuOpen(!isMobileMenuOpen);
-	};
+	}, [isMobileMenuOpen]);
 
 	return (
 		<>
@@ -224,6 +225,8 @@ const Navbar = () => {
 			</div>
 		</>
 	);
-};
+});
+
+Navbar.displayName = "Navbar";
 
 export default Navbar;

@@ -1,10 +1,11 @@
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, PenTool, Brush } from "lucide-react";
 import { motion } from "framer-motion";
-import myImage from '@/assets/images/hero.webp'; // Import your image
+import myImage from '@/assets/images/hero.webp';
 
-const Hero = () => {
-  const handleScrollToNext = () => {
+const Hero = memo(() => {
+  const handleScrollToNext = useCallback(() => {
     // Try to find the next section - adjust these selectors based on your actual page structure
     const nextSection = document.getElementById('about') || 
                        document.getElementById('portfolio') || 
@@ -21,7 +22,7 @@ const Hero = () => {
         behavior: 'smooth'
       });
     }
-  };
+  }, []);
 
   return (
     <div id="home" className="h-full relative w-full bg-background">
@@ -253,6 +254,8 @@ const Hero = () => {
       </a>
     </div>
   );
-};
+});
+
+Hero.displayName = "Hero";
 
 export default Hero;

@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/context/ThemeContext";
+import { useTheme } from "@/hooks/useTheme";
 
-const ThemeToggle = () => {
+const ThemeToggle = memo(() => {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -33,6 +34,8 @@ const ThemeToggle = () => {
       <span className="absolute inset-0 rounded-full bg-accent/20 scale-0 group-hover:scale-100 transition-transform duration-300" />
     </button>
   );
-};
+});
+
+ThemeToggle.displayName = "ThemeToggle";
 
 export default ThemeToggle;
