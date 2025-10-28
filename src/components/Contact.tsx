@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  MapPin, 
-  Phone, 
+import {
+  Mail,
+  MapPin,
+  Phone,
   Send,
   CheckCircle2,
   Loader2,
@@ -120,25 +120,46 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setFormStatus("loading");
 
     try {
-      
+      const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+
+      if (!formspreeEndpoint) {
+        throw new Error('Formspree endpoint is missing. Please check your environment variables.');
+      }
+
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setFormStatus("success");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormErrors({});
+
       setTimeout(() => {
-        setFormStatus("success");
-        setFormData({ name: "", email: "", subject: "", message: "" });
-        setFormErrors({});
-        
-        setTimeout(() => {
-          setFormStatus("idle");
-        }, 3000);
-      }, 2000);
+        setFormStatus("idle");
+      }, 3000);
     } catch (error) {
+      console.error('Form submission failed:', error);
       setFormStatus("error");
       setTimeout(() => setFormStatus("idle"), 3000);
     }
