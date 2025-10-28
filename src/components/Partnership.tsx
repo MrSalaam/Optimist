@@ -205,8 +205,8 @@ const Partnership = memo(() => {
                         alt={`${partner.name} logo`} 
                         className={`w-auto transition-all duration-300 ${
                           partner.name === 'Hinansho' 
-                            ? 'h-28 grayscale group-hover:grayscale-0' // Specific styles for Hinansho logo
-                            : 'h-8 grayscale group-hover:grayscale-0' // Default styles for other logos
+                            ? 'h-28' 
+                            : 'h-8' 
                         }`}
                       />
                     </motion.div>

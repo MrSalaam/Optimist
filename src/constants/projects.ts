@@ -1,9 +1,9 @@
-// Optimized video paths with WebM format
+
 const bashkim = "/videos/bashkim.webm";
 const c = "/videos/c.webm";
 const recuva = "/videos/recuva.webm";
 
-// Optimized image paths with WebP format
+
 const hinansho = "/images/hinansho.webp";
 const EUPHORIA = "/images/EUPHORIA.webp";
 const ALARABARA = "/images/ALARABARA.webp";
@@ -52,7 +52,7 @@ export const PROJECTS: Project[] = [
     mediaType: "video", 
     featured: true, 
     poster: "/images/posters/c-poster.webp",
-    link: "#", 
+    link: "https://www.behance.net/gallery/219575507/CULTURE-COUTURE", 
     description: "Complete brand transformation" 
   },
   { 
@@ -63,28 +63,28 @@ export const PROJECTS: Project[] = [
     mediaType: "video", 
     featured: false, 
     poster: "/images/posters/recuva-poster.webp",
-    link: "#", 
+    link: "https://www.behance.net/gallery/208206583/MOTION-DESIGN-PROJECTS", 
     description: "Dynamic motion design" 
   },
   { 
     id: 3, 
     category: "Brand Identity Design", 
     year: "2025", 
-    media: hinansho, 
+    media: EUPHORIA, 
     mediaType: "image", 
     featured: true, 
-    link: "#", 
-    description: "Realty identity" 
+    link: "https://www.behance.net/gallery/234878731/Euphoria", 
+    description: "Creative brand solution" 
   },
   { 
     id: 4, 
     category: "Brand Identity Design", 
     year: "2025", 
-    media: EUPHORIA, 
+    media: hinansho, 
     mediaType: "image", 
     featured: false, 
     link: "#", 
-    description: "Creative brand solution" 
+    description: "Real estate brand design" 
   },
   { 
     id: 5, 
@@ -93,7 +93,7 @@ export const PROJECTS: Project[] = [
     media: ALARABARA, 
     mediaType: "image", 
     featured: false, 
-    link: "#", 
+    link: "https://www.behance.net/gallery/234884483/Alarabara-wears", 
     description: "Cultural brand design" 
   },
   { 
@@ -104,7 +104,7 @@ export const PROJECTS: Project[] = [
     mediaType: "video", 
     featured: true, 
     poster: "/images/posters/bashkim-poster.webp",
-    link: "#", 
+    link: "https://www.behance.net/gallery/208206583/MOTION-DESIGN-PROJECTS", 
     description: "Engaging motion graphics" 
   },
   { 
@@ -114,7 +114,7 @@ export const PROJECTS: Project[] = [
     media: instagram, 
     mediaType: "image", 
     featured: false, 
-    link: "#", 
+    link: "https://www.behance.net/gallery/234882355/Product-Convoy", 
     description: "Social media design" 
   },
   { 
@@ -144,7 +144,7 @@ export const PROJECTS: Project[] = [
     media: couture, 
     mediaType: "image", 
     featured: true, 
-    link: "#", 
+    link: "https://www.behance.net/gallery/219575507/CULTURE-COUTURE", 
     description: "Luxury brand design" 
   },
   { 
@@ -154,7 +154,7 @@ export const PROJECTS: Project[] = [
     media: fresh, 
     mediaType: "image", 
     featured: false, 
-    link: "#", 
+    link: "https://www.behance.net/gallery/202185349/Grocery-Store-Branding-Project", 
     description: "E-commerce visuals" 
   }
 ];
