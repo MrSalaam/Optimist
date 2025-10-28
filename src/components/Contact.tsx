@@ -144,6 +144,7 @@ const Contact = () => {
           email: formData.email,
           subject: formData.subject,
           message: formData.message,
+          _replyto: formData.email,
         }),
       });
 

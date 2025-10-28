@@ -26,7 +26,7 @@ function App() {
     // Reduce loading time for better UX
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Reduced from 3 seconds to 1.5 seconds
+    }, 5000); // Reduced from 3 seconds to 1.5 seconds
 
     return () => clearTimeout(timer);
   }, []);

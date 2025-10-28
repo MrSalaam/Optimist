@@ -9,7 +9,7 @@ const Partnership = memo(() => {
   const testimonials = [
     {
       quote: "Ayilara S. is a top-notch brand designer. He delivered amazing work that truly captured our brand's essence. Professional, creative, and always on time—couldn't ask for more! Highly recommend his services.",
-      author: "Olusegun JOEL-ALABI",
+      author: "Olusegun JOE-ALABI",
       title: "CEO, Makkan Innovation",
       image: "/images/testimonials/segun.jpg"
     },
