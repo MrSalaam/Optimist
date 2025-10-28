@@ -86,7 +86,7 @@ const Hero = memo(() => {
                 ))}
               </span>
               <span className="block lg:mt-1">
-                {"S.A Ayilara".split('').map((char, index) => (
+                {"Sodiq Ayilara".split('').map((char, index) => (
                   <motion.span
                     key={`line2-${char}-${index}`}
                     className="inline-block text-accent"
