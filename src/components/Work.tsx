@@ -19,29 +19,7 @@ interface ImageWithLoaderProps {
 const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({ src, className, alt = "Project image" }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [shouldLoad, setShouldLoad] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
-
-  // Use Intersection Observer for true lazy loading
-  useEffect(() => {
-    if (!imgRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShouldLoad(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { rootMargin: "100px" }
-    );
-
-    observer.observe(imgRef.current);
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div ref={imgRef} className="absolute inset-0">
@@ -55,17 +33,15 @@ const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({ src, className, alt =
         </div>
       )}
       
-      {shouldLoad && (
-        <img
-          src={src}
-          alt={alt}
-          className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
-        />
-      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+        loading="eager"
+        decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+      />
     </div>
   );
 };
@@ -177,31 +153,31 @@ const ProjectCard: React.FC<ProjectCardProps> = React.memo(({ project, isHovered
         {/* Ratio box to control height responsively */}
         <div className={`${ratioClass} block`} />
 
-        {/* Media - Only render when visible */}
-        {isVisible && (
-          <div className="absolute inset-0 overflow-hidden rounded-2xl">
-            {project.mediaType === "video" ? (
-              <video 
+        {/* Media */}
+        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+          {project.mediaType === "video" ? (
+            isVisible && (
+              <video
                 ref={(el) => onVideoRef(project.id, el)}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
                 muted
                 loop
-                playsInline 
+                playsInline
                 autoPlay
                 preload="metadata"
                 poster={project.poster}
               >
                 <source src={project.media} type="video/webm" />
-              </video> 
-            ) : (
-              <ImageWithLoader 
-                src={project.media} 
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform" 
-                alt={project.category}
-              />
-            )}
-          </div>
-        )}
+              </video>
+            )
+          ) : (
+            <ImageWithLoader
+              src={project.media}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
+              alt={project.category}
+            />
+          )}
+        </div>
 
         {/* Gradient Overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300 rounded-2xl" />
